@@ -459,74 +459,6 @@ void renderCallback(void)
     glutSwapBuffers();
 }
 
-
-// normalKeys() ////////////////////////////////////////////////////////////////
-//
-//  GLUT keyboard callback.
-//
-////////////////////////////////////////////////////////////////////////////////
-void normalKeys(unsigned char key, int x, int y)
-{
-    if (key == 'q' || key == 'Q')
-        exit(0);
-
-    if (key == 'c' || key == 'C')
-    {
-        if (currentCamera == CAMERA_INNER)   currentCamera = CAMERA_OUTER;
-        else                                currentCamera = CAMERA_INNER;
-        glutPostRedisplay();
-    }
-
-    float movementConstant = 0.3;
-    if (key == 'w' || key == 'W')
-    {
-        if (USING_INNER)
-        {
-            innerCamXYZ += innerCamDir * movementConstant * (key == 'w' ? 1 : 3);
-        }
-        else {
-            outerCamTPR.z -= 1.0f * movementConstant;
-
-            //limit the camera radius to some reasonable values so the user can't get lost
-            if (outerCamTPR.z < 2.0)
-                outerCamTPR.z = 2.0;
-            if (outerCamTPR.z > 10.0 * (currentCamera + 1))
-                outerCamTPR.z = 10.0 * (currentCamera + 1);
-            recomputeOrientation(outerCamXYZ, outerCamTPR);
-        }
-        glutPostRedisplay();
-    }
-
-    if (key == 's' || key == 'S')
-    {
-        if (USING_INNER)
-        {
-            innerCamXYZ -= innerCamDir * movementConstant * (key == 's' ? 1 : 3);
-        }
-        else {
-            outerCamTPR.z += 1.0f * movementConstant;
-
-            //limit the camera radius to some reasonable values so the user can't get lost
-            if (outerCamTPR.z < 2.0)
-                outerCamTPR.z = 2.0;
-            if (outerCamTPR.z > 10.0 * (currentCamera + 1))
-                outerCamTPR.z = 10.0 * (currentCamera + 1);
-            recomputeOrientation(outerCamXYZ, outerCamTPR);
-        }
-        glutPostRedisplay();
-    }
-
-    if (key == 'd' || key == 'D')
-    {
-        sphereOn = !sphereOn;
-        glutPostRedisplay();
-    }
-
-}
-
-
-
-
 // main() //////////////////////////////////////////////////////////////////////
 //
 //  Program entry point. Does not process command line arguments.
@@ -553,7 +485,6 @@ int main(int argc, char** argv)
 
     //register callback functions...
     glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
-    glutKeyboardFunc(normalKeys);
     glutDisplayFunc(renderCallback);
     glutReshapeFunc(resizeWindow);
     glutMouseFunc(mouseCallback);
