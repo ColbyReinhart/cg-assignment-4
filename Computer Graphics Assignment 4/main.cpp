@@ -37,6 +37,8 @@ Point innerCamXYZ;
 Point innerCamTPR;
 Point innerCamDir;
 
+// Robot
+Robot robot;
 
 // recomputeOrientation() //////////////////////////////////////////////////////
 //
@@ -212,7 +214,7 @@ void drawSceneElements(void)
     //a different winding set. there is a known 'bug' that results in the 
     //winding of the teapot to be backwards.
     glFrontFace(GL_CW);
-    glutSolidTeapot(1.0f);
+    robot.display();
     glFrontFace(GL_CCW);
 
 }
