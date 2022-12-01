@@ -1,4 +1,5 @@
 #include "point.h"
+#include "robot.h"
 
 #include <math.h>
 #include <stdio.h>
