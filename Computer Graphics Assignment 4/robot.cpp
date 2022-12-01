@@ -49,6 +49,24 @@ Vec3 Vec3::operator/(const Vec3& rhs) const
 	return result;
 }
 
+Vec3 Vec3::operator*(const float scalar) const
+{
+	Vec3 result;
+	result.x = x * scalar;
+	result.y = y * scalar;
+	result.z = z * scalar;
+	return result;
+}
+
+Vec3 Vec3::operator/(const float scalar) const
+{
+	Vec3 result;
+	result.x = x / scalar;
+	result.y = y / scalar;
+	result.z = z / scalar;
+	return result;
+}
+
 //
 // ROBOT IMPLEMENTATION
 //
@@ -96,7 +114,14 @@ void Robot::display() const
 {
 	// Init
 	glPushMatrix();
-	glTranslatef(pos_.x, pos_.y, pos_.z);
+
+	// Set up rotation and translation
+	glTranslatef(0, 2.5f, 0);	// Move center to point of rotation
+	glTranslatef(preTrans_.x, preTrans_.y, preTrans_.z);
+	glRotatef(rot_.x, 1, 0, 0);	// Rotate
+	glRotatef(rot_.y, 0, 1, 0);
+	glRotatef(rot_.z, 0, 0, 1);
+	glTranslatef(pos_.x, pos_.y - 2.5f, pos_.z); // Translate to actual position
 	glColor3f(color_[0], color_[1], color_[2]);
 
 	// Draw the head
@@ -115,9 +140,9 @@ void Robot::display() const
 	// Draw the left arm
 	glPushMatrix();
 	// Upper arm
-	glTranslatef(0.35, 2.85, 0); // Move center to point of rotation
+	glTranslatef(0.35, 3.1, 0); // Move center to point of rotation
 	glRotatef(getJointRot(Joints::LEFT_SHOULDER), 1, 0, 0); // Rotate joint
-	glTranslatef(0.35, 0, 0); // Move into position
+	glTranslatef(0.35, -0.25, 0); // Move into position
 	// Scale and draw
 	glPushMatrix();
 	glScalef(0.4, 0.85, 0.4);
@@ -138,9 +163,9 @@ void Robot::display() const
 	// Draw the right arm
 	glPushMatrix();
 	// Upper arm
-	glTranslatef(-0.35, 2.85, 0); // Move center to point of rotation
+	glTranslatef(-0.35, 3.1, 0); // Move center to point of rotation
 	glRotatef(getJointRot(Joints::RIGHT_SHOULDER), 1, 0, 0); // Rotate joint
-	glTranslatef(-0.35, 0, 0); // Move into position
+	glTranslatef(-0.35, -0.25, 0); // Move into position
 	// Scale and draw
 	glPushMatrix();
 	glScalef(0.4, 0.85, 0.4);
@@ -212,17 +237,12 @@ void Robot::display() const
 // ROBOTANIMATOR IMPLEMENTATION
 //
 
-RobotAnimator::RobotAnimator(Robot& robot) : robot_(robot) {}
+RobotAnimator::RobotAnimator(Robot& robot, const bool loop) :
+	robot_(robot), token_(robot), loop_(loop) {}
 
 RobotAnimator& RobotAnimator::addAnim(const Animation anim)
 {
 	anims_.push_back(anim);
-	return *this;
-}
-
-RobotAnimator& RobotAnimator::addAnims(const std::list<Animation>& anims)
-{
-	anims_.insert(anims_.end(), anims.begin(), anims.end());
 	return *this;
 }
 
@@ -241,6 +261,8 @@ void RobotAnimator::animate()
 		currentAnim_ = anims_.begin();
 		animTimeLeft_ = currentAnim_->deltaTime;
 
+		// Reset and start
+		reset();
 		animStarted_ = true;
 	}
 
@@ -251,7 +273,14 @@ void RobotAnimator::animate()
 
 		if (currentAnim_ == anims_.end())
 		{
-			currentAnim_ = anims_.begin();
+			if (loop_)
+			{
+				reset();
+			}
+			else
+			{
+				cancelAnimation();
+			}
 		}
 
 		animTimeLeft_ = currentAnim_->deltaTime;
@@ -266,8 +295,9 @@ void RobotAnimator::animate()
 	}
 
 	// Do robot transformations (delta)
-	robot_.translate(currentAnim_->deltaPos, true);
-	robot_.rotate(currentAnim_->deltaRot, true);
+	robot_.translate(currentAnim_->deltaPos / currentAnim_->deltaTime, true);
+	robot_.rotate(currentAnim_->deltaRot / currentAnim_->deltaTime, true);
+	robot_.preTrans(currentAnim_->deltaPrePos / currentAnim_->deltaTime, true);
 
 	// Draw the robot and decrement time left
 	robot_.display();
@@ -278,4 +308,11 @@ void RobotAnimator::cancelAnimation()
 {
 	animStarted_ = false;
 	anims_.clear();
+}
+
+void RobotAnimator::reset()
+{
+	robot_ = token_;
+	currentAnim_ = anims_.begin();
+	animTimeLeft_ = currentAnim_->deltaTime;
 }

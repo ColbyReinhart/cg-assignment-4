@@ -15,10 +15,15 @@ struct Vec3
 {
 	float x, y, z;
 
+	// Vector arithmetic overloads
 	Vec3 operator+(const Vec3& rhs) const;
 	Vec3 operator-(const Vec3& rhs) const;
 	Vec3 operator*(const Vec3& rhs) const;
 	Vec3 operator/(const Vec3& rhs) const;
+
+	// Scaler multiplication overloads
+	Vec3 operator*(const float scalar) const;
+	Vec3 operator/(const float scalar) const;
 };
 
 // Hold mouse information
@@ -67,6 +72,7 @@ public:
 	// General transformations
 	void translate(const Vec3& pos, bool delta = false) { pos_ = (delta) ? pos_ + pos : pos; }
 	void rotate(const Vec3& rot, bool delta = false) { rot_ = (delta) ? rot_ + rot : rot; }
+	void preTrans(const Vec3& pos, bool delta = false) { preTrans_ = (delta) ? preTrans_ + pos : pos; }
 
 	// Set color
 	void setColor(const float red, const float green, const float blue);
@@ -82,6 +88,7 @@ private:
 	float color_[3] = { 0, 0, 1 }; // Robot's color
 	Vec3 pos_ = { 0 };
 	Vec3 rot_ = { 0 };
+	Vec3 preTrans_ = { 0 }; // Translation before rotating -- useful for rotating after translation
 	bool wireframe_; // Are we drawing as wireframe?
 };
 
@@ -100,18 +107,23 @@ public:
 		float jointDeltas[Robot::NUM_JOINTS];
 		Vec3 deltaPos;
 		Vec3 deltaRot;
+		Vec3 deltaPrePos;
 		float deltaTime; // measured in frames
 	};
 
-	RobotAnimator(Robot& robot);
+	// Constructors
+	RobotAnimator(Robot& robot, const bool loop = true);
 
+	// Animation builders
 	RobotAnimator& addAnim(const Animation anim);
 
-	RobotAnimator& addAnims(const std::list<Animation>& anims);
-
+	// Animation controllers
 	void animate();
-
 	void cancelAnimation();
+
+	// Control animation state
+	void saveState() { token_ = robot_; }
+	void reset();
 
 	static const int FRAME_DELAY = 1000 / 60; // in milliseconds
 
@@ -120,11 +132,13 @@ private:
 	// Members to be initialized by constructor
 	std::list<Animation> anims_;
 	Robot& robot_;
+	const bool loop_;
 
 	// Members used by animate() to hold state
 	std::list<Animation>::iterator currentAnim_;
 	int animTimeLeft_ = 0;
 	bool animStarted_ = false;
+	Robot token_; // Used to save state
 };
 
 #endif // ROBOT_HPP
