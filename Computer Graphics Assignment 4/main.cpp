@@ -39,6 +39,8 @@ Point innerCamDir;
 
 // Robot
 Robot robot;
+RobotAnimator straightAnimator(robot);
+constexpr float straightWalkLength = 6.0f;	// Length of straight walk
 
 // recomputeOrientation() //////////////////////////////////////////////////////
 //
@@ -461,6 +463,13 @@ void renderCallback(void)
     glutSwapBuffers();
 }
 
+void doAnimation(int v)
+{
+    straightAnimator.animate();
+    glutPostRedisplay();
+    glutTimerFunc(RobotAnimator::FRAME_DELAY, doAnimation, v);
+}
+
 // main() //////////////////////////////////////////////////////////////////////
 //
 //  Program entry point. Does not process command line arguments.
@@ -485,12 +494,71 @@ int main(int argc, char** argv)
     outerCamXYZ = Point(0, 0, 0);
     recomputeOrientation(outerCamXYZ, outerCamTPR);
 
+    // Set up robot's starting position
+    const int startingPos[] = { -20.0f, 30.0f, -20.0f, -30.0f, -30.0f, 5.0f, 20.0f, 0 };
+    robot.setJoints(startingPos);
+
+    //
+    // Create straight line walking animation
+    //
+
+    // Move the left foot halfway back, pick up the right foot and move the
+    // right leg forward
+    RobotAnimator::Animation straightWalk1
+    {
+        { 0, -30.0f, 0, 30.0f, 25.0f, -5.0f, -25.0f, 40.0f },	// joint rotations
+        { 0, 0, straightWalkLength / 8 },						// translation
+        { 0 },													// rotation
+        { 0 },													// translation before rotation
+        30														// frames to complete
+    };
+
+    // Move the left foot the rest of the way back, move the right leg the
+    // rest of the way forward, and straigten the right leg
+    RobotAnimator::Animation straightWalk2
+    {
+        { 0, -30.0f, 0, 30.0f, 25.0f, 0, -25.0f, -35.0f },	// joint rotations
+        { 0, 0, straightWalkLength / 8 },					// translation
+        { 0 },												// rotation
+        { 0 },												// translation before rotation
+        30													// frames to complete
+    };
+
+    // Move the right foot halfway back, pick up the left foot and move the
+    // left leg forward
+    RobotAnimator::Animation straightWalk3
+    {
+        { 0, 30.0f, 0, -30.0f, -25.0f, 40.0f, 25.0f, -5.0f },	// joint rotations
+        { 0, 0, straightWalkLength / 8 },						// translation
+        { 0 },													// rotation
+        { 0 },													// translation before rotation
+        30														// frames to complete
+    };
+
+    // Finish extending left leg
+    RobotAnimator::Animation straightWalk4
+    {
+        { 0, 30.0f, 0, -30.0f, -25.0f, -35.0f, 25.0f, 0 },	// joint rotations
+        { 0, 0, straightWalkLength / 8 },					// translation
+        { 0 },												// rotation
+        { 0 },												// translation before rotation
+        30													// frames to complete
+    };
+
+    // Initialize animator
+    straightAnimator.addAnim(straightWalk1).addAnim(straightWalk2).addAnim(straightWalk3).addAnim(straightWalk4);
+    straightAnimator.addAnim(straightWalk1).addAnim(straightWalk2).addAnim(straightWalk3).addAnim(straightWalk4);
+    robot.translate({ 0, 0, -3.0f });
+    robot.useWireframe(false);
+    straightAnimator.saveState();
+
     //register callback functions...
     glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
     glutDisplayFunc(renderCallback);
     glutReshapeFunc(resizeWindow);
     glutMouseFunc(mouseCallback);
     glutMotionFunc(mouseMotion);
+    glutTimerFunc(0, doAnimation, 0);
 
     //do some basic OpenGL setup
     initScene();
