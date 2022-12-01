@@ -5,7 +5,7 @@
 
 #include <math.h>
 #include <iostream>
-#include "robot.hpp"
+#include "robot.h"
 
 //
 // VEC3 OVERLOADS
