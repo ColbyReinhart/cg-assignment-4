@@ -40,7 +40,6 @@ Point innerCamDir;
 // Robot
 Robot robot;
 RobotAnimator straightAnimator(robot);
-constexpr float straightWalkLength = 6.0f;	// Length of straight walk
 
 // recomputeOrientation() //////////////////////////////////////////////////////
 //
@@ -507,7 +506,7 @@ int main(int argc, char** argv)
     RobotAnimator::Animation straightWalk1
     {
         { 0, -30.0f, 0, 30.0f, 25.0f, -5.0f, -25.0f, 40.0f },	// joint rotations
-        { 0, 0, straightWalkLength / 8 },						// translation
+        { 0 },						                            // translation
         { 0 },													// rotation
         { 0 },													// translation before rotation
         30														// frames to complete
@@ -518,7 +517,7 @@ int main(int argc, char** argv)
     RobotAnimator::Animation straightWalk2
     {
         { 0, -30.0f, 0, 30.0f, 25.0f, 0, -25.0f, -35.0f },	// joint rotations
-        { 0, 0, straightWalkLength / 8 },					// translation
+        { 0 },                          					// translation
         { 0 },												// rotation
         { 0 },												// translation before rotation
         30													// frames to complete
@@ -529,7 +528,7 @@ int main(int argc, char** argv)
     RobotAnimator::Animation straightWalk3
     {
         { 0, 30.0f, 0, -30.0f, -25.0f, 40.0f, 25.0f, -5.0f },	// joint rotations
-        { 0, 0, straightWalkLength / 8 },						// translation
+        { 0 },	                            					// translation
         { 0 },													// rotation
         { 0 },													// translation before rotation
         30														// frames to complete
@@ -539,7 +538,7 @@ int main(int argc, char** argv)
     RobotAnimator::Animation straightWalk4
     {
         { 0, 30.0f, 0, -30.0f, -25.0f, -35.0f, 25.0f, 0 },	// joint rotations
-        { 0, 0, straightWalkLength / 8 },					// translation
+        { 0 },                          					// translation
         { 0 },												// rotation
         { 0 },												// translation before rotation
         30													// frames to complete
@@ -548,8 +547,6 @@ int main(int argc, char** argv)
     // Initialize animator
     straightAnimator.addAnim(straightWalk1).addAnim(straightWalk2).addAnim(straightWalk3).addAnim(straightWalk4);
     straightAnimator.addAnim(straightWalk1).addAnim(straightWalk2).addAnim(straightWalk3).addAnim(straightWalk4);
-    robot.translate({ 0, 0, -3.0f });
-    robot.useWireframe(false);
     straightAnimator.saveState();
 
     //register callback functions...
