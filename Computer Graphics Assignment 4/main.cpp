@@ -239,112 +239,29 @@ void drawInnerCamera()
     glTranslatef(innerCamXYZ.x, innerCamXYZ.y, innerCamXYZ.z);
     glRotatef(-innerCamTPR.x * 180.0 / M_PI, 0, 1, 0);
     glRotatef(innerCamTPR.y * 180.0 / M_PI, 1, 0, 0);
-    glScalef(1, -2, 0.75);
-
-
     glColor3f(0, 1, 0);
+
+    // Camera box
+    glPushMatrix();
+    glScalef(2, 0.5, 1.5);
     glutWireCube(1.0f);
+    glPopMatrix();
 
-    //draw the reels on top of the camera...
-    for (int currentReel = 0; currentReel < 2; currentReel++)
+    // Camera flash
+    glPushMatrix();
+    glTranslatef(-0.5f, 0, -0.85f);
+    glScalef(2, 1, 1);
+    glutWireCube(0.2f);
+    glPopMatrix();
+    
+    // Camera lens
+    const float lensRadius = 0.5f;
+    glBegin(GL_LINE_LOOP);
+    for (float i = 0; i < 2 * M_PI; i += 0.1f)
     {
-        float radius = 0.25f;
-        int resolution = 32;
-        Point reelCenter = Point(0, -0.25 + (currentReel == 0 ? 0 : 0.5), -0.5);
-        glBegin(GL_LINES);
-        Point s = reelCenter - Point(0, 0.25, 0);
-        glVertex3f(s.x, s.y, s.z);
-        for (int i = 0; i < resolution; i++)
-        {
-            float ex = -cosf(i / (float)resolution * M_PI);
-            float why = sinf(i / (float)resolution * M_PI);
-            Point p = Point(0, ex * radius, -why * radius * 3) + reelCenter;
-            glVertex3f(p.x, p.y, p.z);  //end of this line...
-            glVertex3f(p.x, p.y, p.z);  //and start of the next
-        }
-        Point f = reelCenter + Point(0, 0.25, 0);
-        glVertex3f(f.x, f.y, f.z);
-        glEnd();
+        glVertex3f(lensRadius * cos(i), -0.25f, lensRadius * sin(i));
     }
-
-    //and just draw the lens shield manually because 
-    //i don't want to think about shear matrices.
-    //clockwise looking from behind the camera:
-    float lensOff = 0.3f;
-    float lensOut = 0.2f;
-    Point v0 = Point(0.5, 0.5, -0.5);
-    Point v1 = Point(-0.5, 0.5, -0.5);
-    Point v2 = Point(-0.5, 0.5, 0.5);
-    Point v3 = Point(0.5, 0.5, 0.5);
-
-    Point l0 = v0 + Point(lensOut, 0, 0) + Point(0, lensOut, 0) + Point(0, 0, -lensOff);
-    Point l1 = v1 + Point(-lensOut, 0, 0) + Point(0, lensOut, 0) + Point(0, 0, -lensOff);
-    Point l2 = v2 + Point(-lensOut, 0, 0) + Point(0, lensOut, 0) + Point(0, 0, lensOff);
-    Point l3 = v3 + Point(lensOut, 0, 0) + Point(0, lensOut, 0) + Point(0, 0, lensOff);
-
-
-    glBegin(GL_LINE_STRIP);
-    l0.glVertex();
-    l1.glVertex();
-    l2.glVertex();
-    l3.glVertex();
-    l0.glVertex();
     glEnd();
-
-    //and connect the two
-    glBegin(GL_LINES);
-    v0.glVertex();  l0.glVertex();
-    v1.glVertex();  l1.glVertex();
-    v2.glVertex();  l2.glVertex();
-    v3.glVertex();  l3.glVertex();
-    glEnd();
-
-
-    if (sphereOn)
-    {
-        //draw a point at the center of the camera
-        glColor3f(1, 0, 0);
-        glPointSize(10);
-        glBegin(GL_POINTS);
-        Point(0, 0, 0).glVertex();
-        glEnd();
-        glPopMatrix();
-
-        //do the same set of transformations, but without the scale..
-        glPushMatrix();
-        glTranslatef(innerCamXYZ.x, innerCamXYZ.y, innerCamXYZ.z);
-        glRotatef(-innerCamTPR.x * 180.0 / M_PI, 0, 1, 0);
-        glRotatef(innerCamTPR.y * 180.0 / M_PI, 1, 0, 0);
-
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glColor4f(1, 1, 1, 0.3);
-        glutSolidSphere(1, 32, 32);
-
-        glDisable(GL_DEPTH_TEST);
-        glColor3f(1, 0, 0);
-        glBegin(GL_LINES);
-        glVertex3f(0, 0, 0);
-        glVertex3f(0, -1, 0);
-        glEnd();
-        glColor3f(0, 0, 1);
-        glBegin(GL_POINTS);
-        glVertex3f(0, -1, 0);
-        glEnd();
-        glEnable(GL_DEPTH_TEST);
-
-        glDisable(GL_CULL_FACE);
-        glDisable(GL_BLEND);
-
-
-        glPopMatrix();
-    }
-    else {
-        glPopMatrix();
-    }
-
 
     glPopAttrib();
 }
