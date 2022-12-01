@@ -29,7 +29,7 @@
     <ClInclude Include="point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="robot.h">
+    <ClInclude Include="robot.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

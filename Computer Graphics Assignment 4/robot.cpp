@@ -3,10 +3,9 @@
 // Colby Reinhart
 // 9-27-2022
 
-#include <GL/glut.h>
 #include <math.h>
 #include <iostream>
-#include "robot.h"
+#include "robot.hpp"
 
 //
 // VEC3 OVERLOADS

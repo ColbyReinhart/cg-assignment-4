@@ -3,9 +3,10 @@
 // Colby Reinhart
 // 9-27-2022
 
-#ifndef ROBOT_H
-#define ROBOT_H
+#ifndef ROBOT_HPP
+#define ROBOT_HPP
 
+#include <GL/glut.h>
 #include <list>
 
 // A vector with an x, y, and z component,
@@ -126,4 +127,4 @@ private:
 	bool animStarted_ = false;
 };
 
-#endif // ROBOT_H
+#endif // ROBOT_HPP
