@@ -257,6 +257,7 @@ void drawInnerCamera()
     }
     glEnd();
 
+    glPopMatrix();
     glPopAttrib();
 }
 
