@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <iostream>
+#include <FreeImage/FreeImage.h>
 
 using namespace std;
 
@@ -19,10 +21,7 @@ int mouseX = 0, mouseY = 0;                 //last known X and Y of the mouse
 bool sphereOn = false;                      //show the camera radius sphere
 
 
-//note to students reading this code:
-//  yes, I should really be more object-oriented with this code.
-//  a lot of this would be simplified and better encapsulated inside
-//  of a Camera class. don't let your code get this ugly!
+// Camera
 enum cameraList { CAMERA_INNER = 0, CAMERA_OUTER = 1 };
 enum cameraList currentCamera = CAMERA_OUTER;
 
@@ -43,6 +42,15 @@ RobotAnimator straightAnimator(robot);
 
 // Trees
 vector<StaticModel*> trees;
+
+// Textures
+const int numTextures = 2;
+char* textureNames[numTextures] =
+{
+    (char*)"textures/oak-log.png",
+    (char*)"textures/oak-leaves.png"
+};
+GLuint textureIDs[numTextures];
 
 // recomputeOrientation() //////////////////////////////////////////////////////
 //
@@ -231,11 +239,15 @@ void drawSceneElements(void)
     glEnable(GL_LIGHTING);
     robot.display();
 
+    glEnable(GL_TEXTURE_2D);
+
     // Draw trees
     for (StaticModel* tree : trees)
     {
-        tree->draw();
+        tree->draw(textureIDs);
     }
+
+    glDisable(GL_TEXTURE_2D);
 }
 
 
@@ -296,6 +308,7 @@ void renderCallback(void)
 {
     //clear the render buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
     float borderWidth = 3;
     //start with the code from the outer camera, which covers the whole screen!
@@ -425,6 +438,69 @@ void doAnimation(int v)
     glutTimerFunc(RobotAnimator::FRAME_DELAY, doAnimation, v);
 }
 
+void loadTextures()
+{
+    glGenTextures(numTextures, textureIDs); // Get the texture object IDs
+
+    // Load all textures
+    for (int i = 0; i < numTextures; ++i)
+    {
+        // Check image format
+        FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(textureNames[i]);
+        if (format == FIF_UNKNOWN)
+        {
+            std::cerr << "Unknown file format for " << textureNames[i] << std::endl;
+            exit(1);
+        }
+
+        // Get image bitmap
+        FIBITMAP* bitmap = FreeImage_Load(format, textureNames[i], 0);
+        if (bitmap == nullptr)
+        {
+            std::cerr << "Failed to load image " << textureNames[i] << std::endl;
+            exit(2);
+        }
+
+        // Convert to BGR format
+        {
+            FIBITMAP* temp = FreeImage_ConvertTo24Bits(bitmap);
+            FreeImage_Unload(bitmap);
+            bitmap = temp;
+        }
+
+        // Grab data from bitmap
+        void* imgData = FreeImage_GetBits(bitmap);
+        int imgWidth = FreeImage_GetWidth(bitmap);
+        int imgHeight = FreeImage_GetHeight(bitmap);
+
+        // Bind the texture
+        if (imgData != nullptr)
+        {
+            glBindTexture(GL_TEXTURE_2D, textureIDs[i]);
+            glTexImage2D
+            (
+                GL_TEXTURE_2D,
+                0,
+                GL_RGBA,
+                imgWidth,
+                imgHeight,
+                0,
+                GL_BGR_EXT,
+                GL_UNSIGNED_BYTE,
+                imgData
+            );
+            // Required since there are no mipmaps.
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+        }
+        else
+        {
+            std::cerr << "Failed to get texture data from " << textureNames[i] << std::endl;
+            exit(3);
+        }
+    }
+}
+
 // main() //////////////////////////////////////////////////////////////////////
 //
 //  Program entry point. Does not process command line arguments.
@@ -511,8 +587,14 @@ int main(int argc, char** argv)
     trees.emplace_back(new Tree({ -8, 0, 8 }));
     trees.emplace_back(new Tree({ 8, 0, -8 }));
 
+    // Get textures ready
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    loadTextures();
 
-    //register callback functions...
+    //register callback functions
     glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
     glutDisplayFunc(renderCallback);
     glutReshapeFunc(resizeWindow);

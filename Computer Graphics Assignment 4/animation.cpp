@@ -4,6 +4,7 @@
 // 12-1-2022
 
 #include "animation.h"
+#include <iostream>///
 
 //
 // StaticModel
@@ -22,7 +23,7 @@ void StaticModel::setTransform() const
 // Tree : StaticModel
 //
 
-void Tree::draw() const
+void Tree::draw(GLuint* textureIDs) const
 {
 	// Start a new matrix
 	glPushMatrix();
@@ -31,6 +32,10 @@ void Tree::draw() const
 	setTransform();
 
 	// Draw the trunk
+	if (textureIDs != nullptr)
+	{
+		glBindTexture(GL_TEXTURE_2D, textureIDs[0]);
+	}
 	glPushMatrix();
 	glTranslatef(0, 1.2f, 0);
 	glScalef(2, 4.5f, 2);
@@ -38,6 +43,10 @@ void Tree::draw() const
 	glPopMatrix();
 
 	// Draw the leaves
+	if (textureIDs != nullptr)
+	{
+		glBindTexture(GL_TEXTURE_2D, textureIDs[1]);
+	}
 	glPushMatrix();
 	glTranslatef(0, 4.5f, 0);
 	glScalef(10.0f, 2.0f, 10.0f);
