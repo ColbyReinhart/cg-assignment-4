@@ -26,7 +26,6 @@ void Tree::draw() const
 {
 	// Start a new matrix
 	glPushMatrix();
-	glColor3f(1, 1, 1);
 
 	// Set transform
 	setTransform();
@@ -34,7 +33,38 @@ void Tree::draw() const
 	// Draw the trunk
 	glPushMatrix();
 	glTranslatef(0, 1.2f, 0);
-	glScalef(2, 4.3f, 2);
+	glScalef(2, 4.5f, 2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	// Draw the leaves
+	glPushMatrix();
+	glTranslatef(0, 4.5f, 0);
+	glScalef(10.0f, 2.0f, 10.0f);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 6.5f, 0);
+	glScalef(6.0f, 2.0f, 6.0f);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 8.5f, 0);
+	glScalef(2.0f, 2.0f, 6.0f);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(2.0f, 8.5f, 0);
+	glScalef(2.0f, 2.0f, 2.0f);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-2.0f, 8.5f, 0);
+	glScalef(2.0f, 2.0f, 2.0f);
 	glutSolidCube(1);
 	glPopMatrix();
 

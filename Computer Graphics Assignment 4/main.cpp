@@ -494,7 +494,7 @@ int main(int argc, char** argv)
 
     // Create some trees
     Tree tree;
-    tree.setPos({3, 0, 0});
+    tree.setPos({-8, 0, 0});
     trees.push_back(&tree);
 
 
