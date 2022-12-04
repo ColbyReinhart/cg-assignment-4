@@ -411,6 +411,7 @@ int main(int argc, char** argv)
     recomputeOrientation(outerCamXYZ, outerCamTPR);
 
     // Set up robot's starting position
+    robot.translate({ 0, -1, 0 }, false);
     const int startingPos[] = { -20.0f, 30.0f, -20.0f, -30.0f, -30.0f, 5.0f, 20.0f, 0 };
     robot.setJoints(startingPos);
 
