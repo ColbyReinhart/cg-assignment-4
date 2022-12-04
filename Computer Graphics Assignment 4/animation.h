@@ -14,7 +14,7 @@
 class StaticModel
 {
 public:
-	virtual void draw() const;
+	virtual void draw() const = 0;
 	void setPos(Vec3 pos) { pos_ = pos; }
 	void setRot(Vec3 rot) { rot_ = rot; }
 	void setScale(Vec3 scale) { scale_ = scale; }
@@ -22,9 +22,9 @@ public:
 protected:
 	virtual void setTransform() const final;
 
-	Vec3 pos_;
-	Vec3 rot_;
-	Vec3 scale_;
+	Vec3 pos_ = { 0 };
+	Vec3 rot_ = { 0 };
+	Vec3 scale_ = { 1, 1, 1 };
 };
 
 //
@@ -34,15 +34,7 @@ protected:
 class Tree : public StaticModel
 {
 public:
-	void draw() const override
-	{
-		glPushMatrix();
-
-		// Set up pos, rot, and scale
-		setTransform();
-
-		glPopMatrix();
-	}
+	void draw() const override;
 };
 
 #endif // ANIMATION_H

@@ -1,5 +1,5 @@
 #include "point.h"
-#include "robot.h"
+#include "animation.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -40,6 +40,9 @@ Point innerCamDir;
 // Robot
 Robot robot;
 RobotAnimator straightAnimator(robot);
+
+// Trees
+vector<StaticModel*> trees;
 
 // recomputeOrientation() //////////////////////////////////////////////////////
 //
@@ -212,6 +215,11 @@ void drawSceneElements(void)
     glEnable(GL_LIGHTING);
     robot.display();
 
+    // Draw trees
+    for (StaticModel* tree : trees)
+    {
+        tree->draw();
+    }
 }
 
 
@@ -481,6 +489,12 @@ int main(int argc, char** argv)
     straightAnimator.addAnim(straightWalk1).addAnim(straightWalk2).addAnim(straightWalk3).addAnim(straightWalk4);
     straightAnimator.addAnim(straightWalk1).addAnim(straightWalk2).addAnim(straightWalk3).addAnim(straightWalk4);
     straightAnimator.saveState();
+
+    // Create some trees
+    Tree tree;
+    tree.setPos({3, 0, 0});
+    trees.push_back(&tree);
+
 
     //register callback functions...
     glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
