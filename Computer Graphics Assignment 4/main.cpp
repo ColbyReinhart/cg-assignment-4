@@ -213,6 +213,20 @@ void drawSceneElements(void)
         }
     }
 
+    // Draw axes
+    glBegin(GL_LINES);
+    // x
+    glColor3f(1, 0, 0);
+    glVertex3f(0, 0, 0); glVertex3f(3, 0, 0);
+    // y
+    glColor3f(0, 1, 0);
+    glVertex3f(0, 0, 0); glVertex3f(0, 3, 0);
+    // z
+    glColor3f(0, 0, 1);
+    glVertex3f(0, 0, 0); glVertex3f(0, 0, 3);
+    glEnd();
+
+
     // Draw the robot
     glEnable(GL_LIGHTING);
     robot.display();
