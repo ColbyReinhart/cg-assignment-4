@@ -198,15 +198,17 @@ void initScene()
 void drawSceneElements(void)
 {
     //draw a simple grid
+    const int gridBounds = 10;
+
     glDisable(GL_LIGHTING);
     glColor3f(1, 1, 1);
     for (int dir = 0; dir < 2; dir++)
     {
-        for (int i = -5; i < 6; i++)
+        for (int i = gridBounds * -1; i <= gridBounds; i++)
         {
             glBegin(GL_LINE_STRIP);
-            for (int j = -5; j < 6; j++)
-                glVertex3f(dir < 1 ? i : j, -0.73f, dir < 1 ? j : i);
+            for (int j = gridBounds * -1; j <= gridBounds; j++)
+                glVertex3f(dir < 1 ? i : j, -1.0f, dir < 1 ? j : i);
             glEnd();
         }
     }
