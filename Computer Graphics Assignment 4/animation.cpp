@@ -12,6 +12,6 @@
 void StaticModel::setTransform() const
 {
 	glTranslatef(pos_.x, pos_.y, pos_.z);
-	glRotatef(rot_.x, rot_.y, rot_.z);
+	///glRotatef(rot_.x, rot_.y, rot_.z);
 	glScalef(scale_.x, scale_.y, scale_.z);
 }

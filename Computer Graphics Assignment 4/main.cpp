@@ -194,8 +194,8 @@ void initScene()
 ////////////////////////////////////////////////////////////////////////////////
 void drawSceneElements(void)
 {
+    //draw a simple grid
     glDisable(GL_LIGHTING);
-    //draw a simple grid under the teapot
     glColor3f(1, 1, 1);
     for (int dir = 0; dir < 2; dir++)
     {
@@ -208,15 +208,9 @@ void drawSceneElements(void)
         }
     }
 
-    //and then draw the teapot itself!
+    // Draw the robot
     glEnable(GL_LIGHTING);
-
-    //see documentation for glutSolidTeapot; glutSolidTeapot must be called with 
-    //a different winding set. there is a known 'bug' that results in the 
-    //winding of the teapot to be backwards.
-    glFrontFace(GL_CW);
     robot.display();
-    glFrontFace(GL_CCW);
 
 }
 
@@ -280,26 +274,44 @@ void renderCallback(void)
 
     float borderWidth = 3;
     //start with the code from the outer camera, which covers the whole screen!
+
+    // Viewport
     glViewport(0, 0, windowWidth, windowHeight);
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
-    glMatrixMode(GL_PROJECTION);    glPushMatrix(); glLoadIdentity();   gluOrtho2D(0, 1, 0, 1);
-    glMatrixMode(GL_MODELVIEW); glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, 1, 0, 1);
+
+    // Model view
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+    // The outer camera has a red border while the inner camera has a white border
     if (currentCamera == CAMERA_OUTER)
         glColor3f(1, 0, 0);
     else
         glColor3f(1, 1, 1);
 
+    // Draw the border as a square covering the screen. We'll fill the screen later
     glBegin(GL_QUADS);
     glVertex2f(0, 0); glVertex2f(0, 1); glVertex2f(1, 1); glVertex2f(1, 0);
     glEnd();
+
+    // Set the viewport dimensions
     glViewport(borderWidth, borderWidth, windowWidth - borderWidth * 2, windowHeight - borderWidth * 2);
+
+    // Draw a black screen over the border square
     glColor3f(0, 0, 0);
     glBegin(GL_QUADS);
     glVertex2f(0, 0); glVertex2f(0, 1); glVertex2f(1, 1); glVertex2f(1, 0);
     glEnd();
 
-    glMatrixMode(GL_PROJECTION);    glPopMatrix();
+    // Set up lighting and depth
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 
@@ -313,10 +325,7 @@ void renderCallback(void)
     drawSceneElements();
     drawInnerCamera();
 
-    ///     draw border and background for preview box in upper corner  //////////////////////
-
-        //next, do the code for the inner camera, which only sets in the top-right
-        //corner!
+    // Set up the inner camera
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
 
@@ -333,6 +342,7 @@ void renderCallback(void)
     //step 3: set the viewport matrix a little larger than needed...
     glViewport(2 * windowWidth / 3.0 - borderWidth, 2 * windowHeight / 3.0 - borderWidth,
         windowWidth / 3.0 + borderWidth, windowHeight / 3.0 + borderWidth);
+
     //step 3a: and fill it with a white rectangle!
     if (currentCamera == CAMERA_OUTER)
         glColor3f(1, 1, 1);
@@ -345,6 +355,7 @@ void renderCallback(void)
     //step 4: trim the viewport window to the size we want it...
     glViewport(2 * windowWidth / 3.0, 2 * windowHeight / 3.0,
         windowWidth / 3.0, windowHeight / 3.0);
+
     //step 4a: and color it black! the padding we gave it before is now a border.
     glColor3f(0, 0, 0);
     glBegin(GL_QUADS);
@@ -358,10 +369,13 @@ void renderCallback(void)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
 
-    ///     begin drawing scene in upper corner //////////////////////////////////////////////
+    // Begin drawing scene in upper corner
 
+    // Set the viewport matrix
     glViewport(2 * windowWidth / 3.0, 2 * windowHeight / 3.0,
         windowWidth / 3.0, windowHeight / 3.0);
+
+    // Set up the camera
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(innerCamXYZ.x, innerCamXYZ.y, innerCamXYZ.z,      //camera is located at (x,y,z)
