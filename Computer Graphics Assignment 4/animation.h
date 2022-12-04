@@ -14,6 +14,8 @@
 class StaticModel
 {
 public:
+	StaticModel(){}
+	StaticModel(const Vec3& pos) { pos_ = pos; }
 	virtual void draw() const = 0;
 	void setPos(Vec3 pos) { pos_ = pos; }
 	void setRot(Vec3 rot) { rot_ = rot; }
@@ -34,6 +36,8 @@ protected:
 class Tree : public StaticModel
 {
 public:
+	Tree(){}
+	Tree(const Vec3& pos): StaticModel(pos) {}
 	void draw() const override;
 };
 

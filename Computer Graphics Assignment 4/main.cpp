@@ -493,9 +493,9 @@ int main(int argc, char** argv)
     straightAnimator.saveState();
 
     // Create some trees
-    Tree tree;
-    tree.setPos({-8, 0, 0});
-    trees.push_back(&tree);
+    trees.emplace_back(new Tree({ -8, 0, -8 }));
+    trees.emplace_back(new Tree({ -8, 0, 8 }));
+    trees.emplace_back(new Tree({ 8, 0, -8 }));
 
 
     //register callback functions...
