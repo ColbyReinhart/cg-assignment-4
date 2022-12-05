@@ -375,9 +375,10 @@ void JointRotation::apply(DynamicModel& model, const float timeDelta) const
 // KeyFrame
 //
 
-void KeyFrame::addComponent(const KeyFrameComponent& component)
+KeyFrame& KeyFrame::addComponent(const KeyFrameComponent& component)
 {
 	components_.push_back(component);
+	return *this;
 }
 
 void KeyFrame::initialize()
@@ -396,4 +397,50 @@ void KeyFrame::apply(DynamicModel& model)
 
 	// Decrement counter
 	--timeLeft_;
+}
+
+//
+// Animation
+//
+
+Animation& Animation::addKeyframe(KeyFrame& keyframe)
+{
+	keyframes_.push_back(keyframe);
+	initialized_ = false;
+	return *this;
+}
+
+void Animation::initialize()
+{
+	currentKeyframe_ = keyframes_.begin();
+	initialized_ = true;
+}
+
+void Animation::animate()
+{
+	// Crash if not initialized
+	if (!initialized_)
+	{
+		std::cerr << "ERROR: attempt to call Animation::animate() without"
+			<< " initializing first!" << std::endl;
+		exit(10);
+	}
+
+	if ((*currentKeyframe_)->finished())
+	{
+		++currentKeyframe_;
+
+		if (currentKeyframe_ == keyframes_.end())
+		{
+			currentKeyframe_ = keyframes_.begin();
+		}
+	}
+
+	(*currentKeyframe_)->apply(model_);
+}
+
+void Animation::reset()
+{
+	(*currentKeyframe_)->reset();
+	currentKeyframe_ = keyframes_.begin();
 }

@@ -169,14 +169,15 @@ public:
 	KeyFrame(const float timeDelta): timeDelta_(timeDelta) {}
 
 	float getTimeDelta() const { return timeDelta_; }
-	void addComponent(const KeyFrameComponent& component);
+	KeyFrame& addComponent(const KeyFrameComponent& component);
 
 	void initialize(); // Finished will return false once this is called
 	void apply(DynamicModel& model);
 	bool finished() { return timeLeft_ > 0.0f; }
+	void reset() { timeLeft_ = 0.0f; }
 
 private:
-	std::list<KeyFrameComponent> components_;
+	std::list<KeyFrameComponent&> components_;
 	const float timeDelta_; // in frames
 	float timeLeft_ = 0.0f;
 };
@@ -184,5 +185,22 @@ private:
 // Class for handling animations on dynamic models. An animator
 // takes a list of keyframes, which in turn takes a list of keyframe
 // components.
+class Animation
+{
+public:
+	Animation(DynamicModel& model) : model_(model) {}
+
+	Animation& addKeyframe(KeyFrame& keyframe);
+
+	void initialize();
+	void animate();
+	void reset();
+
+private:
+	std::list<KeyFrame&> keyframes_;
+	std::list<KeyFrame&>::iterator currentKeyframe_;
+	DynamicModel& model_;
+	bool initialized_ = false;
+};
 
 #endif // ANIMATION_H

@@ -7,6 +7,7 @@
 #define MAIN_H
 
 #include <GL/glut.h>
+#include <iostream>
 
 void solidCube(const GLfloat size);
 void solidSphere(const GLfloat size);
