@@ -69,6 +69,11 @@ public:
 	DynamicModel() {}
 	DynamicModel(const struct Vec3& pos, const struct Vec3& rot = { 0 }, const struct Vec3& scale = { 1, 1, 1 });
 	
+	// Transformation functions
+	void translate(const Vec3& pos, const bool delta = true);
+	void rotate(const Vec3& rot,const bool delta = true);
+	void scale(const Vec3& scale, const bool delta = true);
+
 	// Joint rotations
 	void rotateJoint(std::string joint, const int rot) { joints_[joint] = rot; }
 	int getJointRot(std::string joint) const { return joints_.at(joint); }
@@ -108,21 +113,52 @@ class Robot : public DynamicModel
 class KeyFrameComponent
 {
 public:
-	enum class Type
-	{
-		JointRotation,
-		Translation,
-		Rotation,
-		Scale
-	};
+	KeyFrameComponent(const bool delta = true) : delta_(delta) {}
+	virtual void apply(DynamicModel& model, const float timeDelta) const = 0;
 
-	KeyFrameComponent(const Type type, const float value)
-		: type_(type), value_(value) {}
-	KeyFrameComponent(std::string& joint, const float value);
+protected:
+	bool delta_; // Should the component add to the transform or set it?
+};
 
-	Type type_;
-	std::string* joint_ = nullptr;
-	float value_;
+class Translation : public KeyFrameComponent
+{
+public:
+	Translation(const Vec3& translation, const bool delta = true);
+	virtual void apply(DynamicModel& model, const float timeDelta) const override;
+
+protected:
+	const Vec3 translation_;
+};
+
+class Rotation : public KeyFrameComponent
+{
+public:
+	Rotation(const Vec3& rotation, const bool delta = true);
+	virtual void apply(DynamicModel& model, const float timeDelta) const override;
+
+protected:
+	const Vec3 rotation_;
+};
+
+class Scale : public KeyFrameComponent
+{
+public:
+	Scale(const Vec3& scale, const bool delta = true);
+	virtual void apply(DynamicModel& model, const float timeDelta) const override;
+
+protected:
+	const Vec3 scale_;
+};
+
+class JointRotation : public KeyFrameComponent
+{
+public:
+	JointRotation(std::string* const name, const float value, const bool delta = true);
+	virtual void apply(DynamicModel& model, const float timeDelta) const override;
+
+protected:
+	std::string* const name_;
+	const float value_;
 };
 
 // A representation of a keyframe, which is constituted of a list of keyframe
@@ -137,13 +173,12 @@ public:
 
 	void initialize(); // Finished will return false once this is called
 	void apply(DynamicModel& model);
-	bool finished() { return timeLeft > 0.0f; }
+	bool finished() { return timeLeft_ > 0.0f; }
 
 private:
 	std::list<KeyFrameComponent> components_;
-	const float timeDelta_;
-	float timeLeft = 0.0f;
-	static const int FRAME_DELAY = 1000 / 60; // in milliseconds
+	const float timeDelta_; // in frames
+	float timeLeft_ = 0.0f;
 };
 
 // Class for handling animations on dynamic models. An animator

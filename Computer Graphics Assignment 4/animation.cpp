@@ -152,6 +152,42 @@ DynamicModel::DynamicModel(const struct Vec3& pos, const struct Vec3& rot, const
 	scale_ = scale;
 }
 
+void DynamicModel::translate(const Vec3& pos, const bool delta)
+{
+	if (delta)
+	{
+		pos_ = pos_ + pos;
+	}
+	else
+	{
+		pos_ = pos;
+	}
+}
+
+void DynamicModel::rotate(const Vec3& rot, const bool delta)
+{
+	if (delta)
+	{
+		rot_ = rot_ + rot;
+	}
+	else
+	{
+		rot_ = rot;
+	}
+}
+
+void DynamicModel::scale(const Vec3& scale, const bool delta)
+{
+	if (delta)
+	{
+		scale_ = scale_ * scale;
+	}
+	else
+	{
+		scale_ = scale;
+	}
+}
+
 //
 // Robot : DynamicModel
 //
@@ -292,14 +328,47 @@ void Robot::draw() const
 }
 
 //
-// KeyFrameComponent
+// KeyFrameComponent Implementations
 //
 
-KeyFrameComponent::KeyFrameComponent(std::string& joint, const float value)
+// Translation
+Translation::Translation(const Vec3& translation, const bool delta)
+	: KeyFrameComponent(delta), translation_(translation) {}
+
+void Translation::apply(DynamicModel& model, const float timeDelta) const
 {
-	type_ = Type::JointRotation;
-	joint_ = &joint;
-	value_ = value;
+	model.translate(translation_ / timeDelta, delta_);
+}
+
+// Rotation
+Rotation::Rotation(const Vec3& rotation, const bool delta)
+	: KeyFrameComponent(delta), rotation_(rotation) {}
+
+void Rotation::apply(DynamicModel& model, const float timeDelta) const
+{
+	model.rotate(rotation_ / timeDelta, delta_);
+}
+
+// Scale
+Scale::Scale(const Vec3& scale, const bool delta)
+	: KeyFrameComponent(delta), scale_(scale) {}
+
+void Scale::apply(DynamicModel& model, const float timeDelta) const
+{
+	model.scale(scale_ / timeDelta, delta_);
+}
+
+// JointRotation
+JointRotation::JointRotation
+(
+	std::string* const name,
+	const float value,
+	const bool delta
+) : KeyFrameComponent(delta), name_(name), value_(value) {}
+
+void JointRotation::apply(DynamicModel& model, const float timeDelta) const
+{
+	model.rotateJoint(*name_, value_ / timeDelta);
 }
 
 //
@@ -313,10 +382,18 @@ void KeyFrame::addComponent(const KeyFrameComponent& component)
 
 void KeyFrame::initialize()
 {
-	timeLeft = timeDelta_;
+	timeLeft_ = timeDelta_;
 }
 
 void KeyFrame::apply(DynamicModel& model)
 {
+	// For each keyframe component, apply the movement
+	// divided by the time delta.
+	for (KeyFrameComponent& component : components_)
+	{
+		component.apply(model, timeDelta_);
+	}
 
+	// Decrement counter
+	--timeLeft_;
 }
