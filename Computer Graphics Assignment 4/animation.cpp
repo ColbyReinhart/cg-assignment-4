@@ -412,7 +412,15 @@ Animation& Animation::addKeyframe(KeyFrame* keyframe)
 
 void Animation::initialize()
 {
+	if (keyframes_.empty())
+	{
+		std::cerr << "ERROR: attempt to call Animation::initialize() without"
+			<< " adding any keyframes!" << std::endl;
+		exit(11);
+	}
+
 	currentKeyframe_ = keyframes_.begin();
+	(*currentKeyframe_)->initialize();
 	initialized_ = true;
 }
 

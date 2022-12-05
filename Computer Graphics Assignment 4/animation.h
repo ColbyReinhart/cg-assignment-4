@@ -75,7 +75,7 @@ public:
 	void scale(const Vec3& scale, const bool delta = true);
 
 	// Joint rotations
-	void rotateJoint(std::string joint, const int rot) { joints_[joint] = rot; }
+	void rotateJoint(std::string joint, const int rot) { joints_[joint] += rot; }
 	int getJointRot(std::string joint) const { return joints_.at(joint); }
 
 	// Display
@@ -174,7 +174,7 @@ public:
 
 	void initialize(); // Finished will return false once this is called
 	void apply(DynamicModel& model);
-	bool finished() { return timeLeft_ > 0.0f; }
+	bool finished() { return timeLeft_ <= 0.0f; }
 	void reset() { timeLeft_ = 0.0f; }
 
 private:

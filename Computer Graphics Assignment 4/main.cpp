@@ -556,11 +556,11 @@ int main(int argc, char** argv)
     // right leg forward
     KeyFrame walk1(30);
     walk1.addComponent(new JointRotation(leftShoulder, -30.0f));
-    walk1.addComponent(new JointRotation(string("right shoulder"), 30.0f));
-    walk1.addComponent(new JointRotation(string("left hip"), 25.0f));
-    walk1.addComponent(new JointRotation(string("left knee"), -5.0f));
-    walk1.addComponent(new JointRotation(string("right hip"), -25.0f));
-    walk1.addComponent(new JointRotation(string("right knee"), 40.0f));
+    walk1.addComponent(new JointRotation(rightShoulder, 30.0f));
+    walk1.addComponent(new JointRotation(leftHip, 25.0f));
+    walk1.addComponent(new JointRotation(leftKnee, -5.0f));
+    walk1.addComponent(new JointRotation(rightHip, -25.0f));
+    walk1.addComponent(new JointRotation(rightKnee, 40.0f));
     robotWalking.addKeyframe(&walk1);
     robotWalking.initialize();
 
