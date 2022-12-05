@@ -127,14 +127,14 @@ void Robot::display() const
 
 	// Draw the head
 	glPushMatrix();
-	glTranslatef(0, 3.75, 0);
-	wireframe_ ? glutWireSphere(0.5, 20, 20) : solidSphere(10);
+	glTranslatef(0, 3.65, 0);
+	wireframe_ ? glutWireCube(0.8f) : solidCube(0.8f);
 	glPopMatrix();
 
 	// Draw the body
 	glPushMatrix();
 	glTranslatef(0, 2.5, 0);
-	glScalef(1, 1.5, 1);
+	glScalef(1, 1.5, 0.6f);
 	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 
