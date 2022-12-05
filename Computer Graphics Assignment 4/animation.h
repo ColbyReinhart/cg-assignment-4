@@ -6,7 +6,7 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include <GL/glut.h>
+#include "main.h"
 #include "robot.h"
 
 // Base class for handling static models which can be animated.

@@ -6,6 +6,7 @@
 #include <math.h>
 #include <iostream>
 #include "robot.h"
+#include "main.h"
 
 //
 // VEC3 OVERLOADS
@@ -127,14 +128,14 @@ void Robot::display() const
 	// Draw the head
 	glPushMatrix();
 	glTranslatef(0, 3.75, 0);
-	wireframe_ ? glutWireSphere(0.5, 20, 20) : glutSolidSphere(0.5, 20, 20);
+	wireframe_ ? glutWireSphere(0.5, 20, 20) : solidSphere(10);
 	glPopMatrix();
 
 	// Draw the body
 	glPushMatrix();
 	glTranslatef(0, 2.5, 0);
 	glScalef(1, 1.5, 1);
-	wireframe_ ? glutWireCube(1) : glutSolidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 
 	// Draw the left arm
@@ -146,7 +147,7 @@ void Robot::display() const
 	// Scale and draw
 	glPushMatrix();
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : glutSolidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 	// Lower arm
 	glTranslatef(0, -0.5, 0); // Move center to point of rotation
@@ -155,7 +156,7 @@ void Robot::display() const
 	glPushMatrix();
 	// Scale and draw
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : glutSolidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 	// Pop matrix
 	glPopMatrix();
@@ -169,7 +170,7 @@ void Robot::display() const
 	// Scale and draw
 	glPushMatrix();
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : glutSolidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 	// Lower arm
 	glTranslatef(0, -0.5, 0); // Move center to point of rotation
@@ -178,7 +179,7 @@ void Robot::display() const
 	glPushMatrix();
 	// Scale and draw
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : glutSolidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 	// Pop matrix
 	glPopMatrix();
@@ -192,7 +193,7 @@ void Robot::display() const
 	// Scale and draw
 	glPushMatrix();
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : glutSolidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 	// Knee
 	glTranslatef(0, -0.5, 0); // Move center to point of rotation
@@ -201,7 +202,7 @@ void Robot::display() const
 	glPushMatrix();
 	// Scale and draw
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : glutSolidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 	// Pop matrix
 	glPopMatrix();
@@ -215,7 +216,7 @@ void Robot::display() const
 	// Scale and draw
 	glPushMatrix();
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : glutSolidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 	// Knee
 	glTranslatef(0, -0.5, 0); // Move center to point of rotation
@@ -224,7 +225,7 @@ void Robot::display() const
 	glPushMatrix();
 	// Scale and draw
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : glutSolidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 	// Pop matrix
 	glPopMatrix();
