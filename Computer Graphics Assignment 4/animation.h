@@ -96,6 +96,7 @@ protected:
 
 class Robot : public DynamicModel
 {
+public:
 	Robot();
 	Robot
 	(
@@ -153,11 +154,11 @@ protected:
 class JointRotation : public KeyFrameComponent
 {
 public:
-	JointRotation(std::string* const name, const float value, const bool delta = true);
+	JointRotation(const std::string& name, const float value, const bool delta = true);
 	virtual void apply(DynamicModel& model, const float timeDelta) const override;
 
 protected:
-	std::string* const name_;
+	const std::string& name_;
 	const float value_;
 };
 
@@ -169,7 +170,7 @@ public:
 	KeyFrame(const float timeDelta): timeDelta_(timeDelta) {}
 
 	float getTimeDelta() const { return timeDelta_; }
-	KeyFrame& addComponent(const KeyFrameComponent& component);
+	KeyFrame& addComponent(KeyFrameComponent* component);
 
 	void initialize(); // Finished will return false once this is called
 	void apply(DynamicModel& model);
@@ -177,7 +178,7 @@ public:
 	void reset() { timeLeft_ = 0.0f; }
 
 private:
-	std::list<KeyFrameComponent&> components_;
+	std::list<KeyFrameComponent*> components_;
 	const float timeDelta_; // in frames
 	float timeLeft_ = 0.0f;
 };
@@ -190,15 +191,17 @@ class Animation
 public:
 	Animation(DynamicModel& model) : model_(model) {}
 
-	Animation& addKeyframe(KeyFrame& keyframe);
+	Animation& addKeyframe(KeyFrame* keyframe);
 
 	void initialize();
 	void animate();
 	void reset();
 
+	static const int FRAME_DELAY = 1000 / 60; // in milliseconds
+
 private:
-	std::list<KeyFrame&> keyframes_;
-	std::list<KeyFrame&>::iterator currentKeyframe_;
+	std::list<KeyFrame*> keyframes_;
+	std::list<KeyFrame*>::iterator currentKeyframe_;
 	DynamicModel& model_;
 	bool initialized_ = false;
 };

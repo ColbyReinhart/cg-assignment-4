@@ -361,21 +361,21 @@ void Scale::apply(DynamicModel& model, const float timeDelta) const
 // JointRotation
 JointRotation::JointRotation
 (
-	std::string* const name,
+	const std::string& name,
 	const float value,
 	const bool delta
 ) : KeyFrameComponent(delta), name_(name), value_(value) {}
 
 void JointRotation::apply(DynamicModel& model, const float timeDelta) const
 {
-	model.rotateJoint(*name_, value_ / timeDelta);
+	model.rotateJoint(name_, value_ / timeDelta);
 }
 
 //
 // KeyFrame
 //
 
-KeyFrame& KeyFrame::addComponent(const KeyFrameComponent& component)
+KeyFrame& KeyFrame::addComponent(KeyFrameComponent* component)
 {
 	components_.push_back(component);
 	return *this;
@@ -390,9 +390,9 @@ void KeyFrame::apply(DynamicModel& model)
 {
 	// For each keyframe component, apply the movement
 	// divided by the time delta.
-	for (KeyFrameComponent& component : components_)
+	for (KeyFrameComponent* component : components_)
 	{
-		component.apply(model, timeDelta_);
+		component->apply(model, timeDelta_);
 	}
 
 	// Decrement counter
@@ -403,7 +403,7 @@ void KeyFrame::apply(DynamicModel& model)
 // Animation
 //
 
-Animation& Animation::addKeyframe(KeyFrame& keyframe)
+Animation& Animation::addKeyframe(KeyFrame* keyframe)
 {
 	keyframes_.push_back(keyframe);
 	initialized_ = false;
@@ -434,6 +434,8 @@ void Animation::animate()
 		{
 			currentKeyframe_ = keyframes_.begin();
 		}
+
+		(*currentKeyframe_)->initialize();
 	}
 
 	(*currentKeyframe_)->apply(model_);

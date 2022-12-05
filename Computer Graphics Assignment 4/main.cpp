@@ -5,7 +5,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <vector>
-#include <iostream>
 #include <FreeImage/FreeImage.h>
 
 using namespace std;
@@ -39,7 +38,16 @@ Point innerCamDir;
 
 // Robot
 Robot robot;
-RobotAnimator straightAnimator(robot);
+Animation robotWalking(robot);
+
+const std::string leftElbow = "left elbow";
+const std::string leftShoulder = "left shoulder";
+const std::string rightElbow = "right elbow";
+const std::string rightShoulder = "right shoulder";
+const std::string leftHip = "left hip";
+const std::string leftKnee = "left knee";
+const std::string rightHip = "right hip";
+const std::string rightKnee = "right knee";
 
 // Trees
 vector<StaticModel*> trees;
@@ -242,7 +250,7 @@ void drawSceneElements(void)
 
     // Draw the robot
     glEnable(GL_LIGHTING);
-    robot.display();
+    robot.draw();
 
     glEnable(GL_TEXTURE_2D);
 
@@ -438,9 +446,9 @@ void renderCallback(void)
 
 void doAnimation(int v)
 {
-    straightAnimator.animate();
+    robotWalking.animate();
     glutPostRedisplay();
-    glutTimerFunc(RobotAnimator::FRAME_DELAY, doAnimation, v);
+    glutTimerFunc(Animation::FRAME_DELAY, doAnimation, v);
 }
 
 void loadTextures()
@@ -532,8 +540,13 @@ int main(int argc, char** argv)
 
     // Set up robot's starting position
     robot.translate({ 0, -1, 0 }, false);
-    const int startingPos[] = { -20.0f, 30.0f, -20.0f, -30.0f, -30.0f, 5.0f, 20.0f, 0 };
-    robot.setJoints(startingPos);
+    robot.rotateJoint(leftElbow, -20.0f);
+    robot.rotateJoint(leftShoulder, 30.0f);
+    robot.rotateJoint(rightElbow, -20.0f);
+    robot.rotateJoint(rightShoulder, -30.0f);
+    robot.rotateJoint(leftHip, -30.0f);
+    robot.rotateJoint(leftKnee, 5.0f);
+    robot.rotateJoint(rightHip, 20.0f);
 
     //
     // Create straight line walking animation
@@ -541,7 +554,18 @@ int main(int argc, char** argv)
 
     // Move the left foot halfway back, pick up the right foot and move the
     // right leg forward
-    RobotAnimator::Animation straightWalk1
+    KeyFrame walk1(30);
+    walk1.addComponent(new JointRotation(leftShoulder, -30.0f));
+    walk1.addComponent(new JointRotation(string("right shoulder"), 30.0f));
+    walk1.addComponent(new JointRotation(string("left hip"), 25.0f));
+    walk1.addComponent(new JointRotation(string("left knee"), -5.0f));
+    walk1.addComponent(new JointRotation(string("right hip"), -25.0f));
+    walk1.addComponent(new JointRotation(string("right knee"), 40.0f));
+    robotWalking.addKeyframe(&walk1);
+    robotWalking.initialize();
+
+
+    /*RobotAnimator::Animation straightWalk1
     {
         { 0, -30.0f, 0, 30.0f, 25.0f, -5.0f, -25.0f, 40.0f },	// joint rotations
         { 0 },						                            // translation
@@ -585,7 +609,7 @@ int main(int argc, char** argv)
     // Initialize animator
     straightAnimator.addAnim(straightWalk1).addAnim(straightWalk2).addAnim(straightWalk3).addAnim(straightWalk4);
     straightAnimator.addAnim(straightWalk1).addAnim(straightWalk2).addAnim(straightWalk3).addAnim(straightWalk4);
-    straightAnimator.saveState();
+    straightAnimator.saveState();*/
 
     // Create some trees
     trees.emplace_back(new Tree({ -8, 0, -8 }));
