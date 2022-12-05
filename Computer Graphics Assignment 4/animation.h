@@ -101,4 +101,40 @@ class Robot : public DynamicModel
 	virtual void draw() const override;
 };
 
+// A representation of a keyframe component. A list of 1 or more
+// keyframe components constitute a keyframe, which defines one "step"
+// of an animation.
+class KeyFrameComponent
+{
+public:
+	enum class Type
+	{
+		JointRotation,
+		Translation,
+		Rotation,
+		Scale,
+		TimeDelta
+	};
+
+	KeyFrameComponent(const Type type, const float value) : type_(type), value_(value) {}
+	KeyFrameComponent(std::string& joint, const float value);
+
+private:
+	Type type_;
+	std::string* joint_ = nullptr;
+	float value_;
+};
+
+// A representation of a keyframe, which is constituted of a list of keyframe
+// components.
+class KeyFrame
+{
+public:
+private:
+};
+
+// Class for handling animations on dynamic models. An animator
+// takes a list of keyframes, which in turn takes a list of keyframe
+// components.
+
 #endif // ANIMATION_H

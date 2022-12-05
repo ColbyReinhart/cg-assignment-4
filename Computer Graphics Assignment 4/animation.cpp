@@ -290,3 +290,14 @@ void Robot::draw() const
 	// Pop initial translation matrix
 	glPopMatrix();
 }
+
+//
+// KeyFrameComponent
+//
+
+KeyFrameComponent::KeyFrameComponent(std::string& joint, const float value)
+{
+	type_ = Type::JointRotation;
+	joint_ = &joint;
+	value_ = value;
+}
