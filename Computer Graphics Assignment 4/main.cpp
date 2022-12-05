@@ -9,6 +9,7 @@
 #include <FreeImage/FreeImage.h>
 
 using namespace std;
+void loadTextures();
 
 // GLOBAL VARIABLES ////////////////////////////////////////////////////////////
 
@@ -187,9 +188,13 @@ void initScene()
     glEnable(GL_LIGHT0);
 
     glEnable(GL_POINT_SMOOTH);
-
     glShadeModel(GL_SMOOTH);
-    //glShadeModel(GL_FLAT);
+
+    glMatrixMode(GL_TEXTURE); // Matric mode for manipulating the texture transform matrix
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    loadTextures();
 
     glutPostRedisplay();
 }
@@ -586,13 +591,6 @@ int main(int argc, char** argv)
     trees.emplace_back(new Tree({ -8, 0, -8 }));
     trees.emplace_back(new Tree({ -8, 0, 8 }));
     trees.emplace_back(new Tree({ 8, 0, -8 }));
-
-    // Get textures ready
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    loadTextures();
 
     //register callback functions
     glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
