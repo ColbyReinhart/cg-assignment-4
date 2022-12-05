@@ -301,3 +301,22 @@ KeyFrameComponent::KeyFrameComponent(std::string& joint, const float value)
 	joint_ = &joint;
 	value_ = value;
 }
+
+//
+// KeyFrame
+//
+
+void KeyFrame::addComponent(const KeyFrameComponent& component)
+{
+	components_.push_back(component);
+}
+
+void KeyFrame::initialize()
+{
+	timeLeft = timeDelta_;
+}
+
+void KeyFrame::apply(DynamicModel& model)
+{
+
+}

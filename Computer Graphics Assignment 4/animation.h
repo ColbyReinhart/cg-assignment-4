@@ -8,6 +8,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <list>
 #include "main.h"
 
 // A vector with an x, y, and z component,
@@ -112,14 +113,13 @@ public:
 		JointRotation,
 		Translation,
 		Rotation,
-		Scale,
-		TimeDelta
+		Scale
 	};
 
-	KeyFrameComponent(const Type type, const float value) : type_(type), value_(value) {}
+	KeyFrameComponent(const Type type, const float value)
+		: type_(type), value_(value) {}
 	KeyFrameComponent(std::string& joint, const float value);
 
-private:
 	Type type_;
 	std::string* joint_ = nullptr;
 	float value_;
@@ -130,7 +130,20 @@ private:
 class KeyFrame
 {
 public:
+	KeyFrame(const float timeDelta): timeDelta_(timeDelta) {}
+
+	float getTimeDelta() const { return timeDelta_; }
+	void addComponent(const KeyFrameComponent& component);
+
+	void initialize(); // Finished will return false once this is called
+	void apply(DynamicModel& model);
+	bool finished() { return timeLeft > 0.0f; }
+
 private:
+	std::list<KeyFrameComponent> components_;
+	const float timeDelta_;
+	float timeLeft = 0.0f;
+	static const int FRAME_DELAY = 1000 / 60; // in milliseconds
 };
 
 // Class for handling animations on dynamic models. An animator
