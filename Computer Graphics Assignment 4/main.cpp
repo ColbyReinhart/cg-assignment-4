@@ -56,13 +56,14 @@ const std::string rightKnee = "right knee";
 vector<StaticModel*> trees;
 
 // Textures
-const int numTextures = 4;
+const int numTextures = 5;
 char* textureNames[numTextures] =
 {
     (char*)"textures/oak-log.png",
     (char*)"textures/oak-leaves.png",
     (char*)"textures/grass.png",
-    (char*)"textures/metal.jpg"
+    (char*)"textures/metal.jpg",
+    (char*)"textures/steve.jpg"
 };
 GLuint textureIDs[numTextures];
 

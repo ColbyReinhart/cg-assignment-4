@@ -20,16 +20,38 @@ const int space = 11;
 const int VertexCount = (90 / space) * (360 / space) * 4;
 VERTICES VERTEX[VertexCount];
 
-void solidCube(const GLfloat size)
+struct TexRect
+{
+	GLfloat bottomLeftX;
+	GLfloat bottomLeftY;
+	GLfloat topRightX;
+	GLfloat topRightY;
+};
+
+struct CubeTexCoords
+{
+	enum class Faces
+	{
+		TOP = 0,
+		BOTTOM = 1,
+		LEFT = 2,
+		RIGHT = 3,
+		FRONT = 4,
+		BACK = 5
+	};
+	TexRect faces[6];
+};
+
+void solidCube(const GLfloat size, const CubeTexCoords* coords)
 {
 	static GLfloat n[6][3] =
 	{
-	  {-1.0, 0.0, 0.0},
-	  {0.0, 1.0, 0.0},
-	  {1.0, 0.0, 0.0},
-	  {0.0, -1.0, 0.0},
-	  {0.0, 0.0, 1.0},
-	  {0.0, 0.0, -1.0}
+	  {-1.0, 0.0, 0.0},	// left
+	  {0.0, 1.0, 0.0},	// top
+	  {1.0, 0.0, 0.0},	// right
+	  {0.0, -1.0, 0.0}, // bottom
+	  {0.0, 0.0, 1.0},	// back
+	  {0.0, 0.0, -1.0}	// front
 	};
 	static GLint faces[6][4] =
 	{
@@ -50,16 +72,24 @@ void solidCube(const GLfloat size)
 	v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size / 2;
 	v[1][2] = v[2][2] = v[5][2] = v[6][2] = size / 2;
 
-	for (i = 5; i >= 0; i--) {
+	for (i = 5; i >= 0; i--)
+	{
+		// If we've been supplied texture coordinates, use them
+		TexRect tex{ 0, 0, 1, 1 };
+		if (coords != nullptr)
+		{
+			tex = coords->faces[i];
+		}
+
 		glBegin(GL_QUADS);
 		glNormal3fv(&n[i][0]);
-		glTexCoord2f(0.0, 0.0);
+		glTexCoord2f(tex.bottomLeftX, tex.bottomLeftY);
 		glVertex3fv(&v[faces[i][0]][0]);
-		glTexCoord2f(0.0, 1.0);
+		glTexCoord2f(tex.bottomLeftX, tex.topRightY);
 		glVertex3fv(&v[faces[i][1]][0]);
-		glTexCoord2f(1.0, 1.0);
+		glTexCoord2f(tex.topRightX, tex.topRightY);
 		glVertex3fv(&v[faces[i][2]][0]);
-		glTexCoord2f(1.0, 0.0);
+		glTexCoord2f(tex.topRightX, tex.bottomLeftY);
 		glVertex3fv(&v[faces[i][3]][0]);
 		glEnd();
 	}

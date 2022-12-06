@@ -9,7 +9,10 @@
 #include <GL/glut.h>
 #include <iostream>
 
-void solidCube(const GLfloat size);
+struct TexRect;
+struct CubeTexCoords;
+
+void solidCube(const GLfloat size, const CubeTexCoords* coords = nullptr);
 void solidSphere(const GLfloat size);
 
 #endif // MAIN_H
