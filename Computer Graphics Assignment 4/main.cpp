@@ -19,7 +19,7 @@ static float aspectRatio;
 GLint leftMouseButton, rightMouseButton;    //status of the mouse buttons
 int mouseX = 0, mouseY = 0;                 //last known X and Y of the mouse
 bool sphereOn = false;                      //show the camera radius sphere
-
+bool wireframe = false;                     //display as a wireframe?
 
 // Camera
 enum cameraList { CAMERA_INNER = 0, CAMERA_OUTER = 1 };
@@ -240,21 +240,40 @@ void drawSceneElements(void)
     // Draw the ground
     const int groundSize = 10;
     const int groundHeight = -1;
-    glBindTexture(GL_TEXTURE_2D, textureIDs[2]); // ground.png
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 0.0);
-    glVertex3f(groundSize, groundHeight, groundSize);
-    glTexCoord2f(0.0, groundSize);
-    glVertex3f(groundSize, groundHeight, -groundSize);
-    glTexCoord2f(groundSize, groundSize);
-    glVertex3f(-groundSize, groundHeight, -groundSize);
-    glTexCoord2f(groundSize, 0.0);
-    glVertex3f(-groundSize, groundHeight, groundSize);
-    glEnd();
+
+    if (wireframe)
+    {
+        //draw a simple grid under the teapot
+        glColor3f(1, 1, 1);
+        for (int dir = 0; dir < 2; dir++)
+        {
+            for (int i = -groundSize; i <= groundSize; i++)
+            {
+                glBegin(GL_LINE_STRIP);
+                for (int j = -groundSize; j <= groundSize; j++)
+                    glVertex3f(dir < 1 ? i : j, groundHeight, dir < 1 ? j : i);
+                glEnd();
+            }
+        }
+    }
+    else
+    {
+        glBindTexture(GL_TEXTURE_2D, textureIDs[2]); // ground.png
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0, 0.0);
+        glVertex3f(groundSize, groundHeight, groundSize);
+        glTexCoord2f(0.0, groundSize);
+        glVertex3f(groundSize, groundHeight, -groundSize);
+        glTexCoord2f(groundSize, groundSize);
+        glVertex3f(-groundSize, groundHeight, -groundSize);
+        glTexCoord2f(groundSize, 0.0);
+        glVertex3f(-groundSize, groundHeight, groundSize);
+        glEnd();
+    }
 
 
     // Draw the robot
-    glBindTexture(GL_TEXTURE_2D, textureIDs[3]);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[3]); // metal.jpg
     robot.draw();
 
     // Draw trees
@@ -517,6 +536,16 @@ void loadTextures()
     }
 }
 
+void processKeyInput(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case '1': // Toggle wireframe
+        wireframe = !wireframe;
+        break;
+    }
+}
+
 // main() //////////////////////////////////////////////////////////////////////
 //
 //  Program entry point. Does not process command line arguments.
@@ -601,6 +630,7 @@ int main(int argc, char** argv)
     glutDisplayFunc(renderCallback);
     glutReshapeFunc(resizeWindow);
     glutMouseFunc(mouseCallback);
+    glutKeyboardFunc(processKeyInput);
     glutMotionFunc(mouseMotion);
     glutTimerFunc(0, doAnimation, 0);
 
