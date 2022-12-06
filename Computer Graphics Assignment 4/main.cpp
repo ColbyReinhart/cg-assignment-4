@@ -16,10 +16,12 @@ static size_t windowWidth = 640;
 static size_t windowHeight = 480;
 static float aspectRatio;
 
-GLint leftMouseButton, rightMouseButton;    //status of the mouse buttons
-int mouseX = 0, mouseY = 0;                 //last known X and Y of the mouse
-bool sphereOn = false;                      //show the camera radius sphere
-bool wireframe = false;                     //display as a wireframe?
+GLint leftMouseButton, rightMouseButton;    // Status of the mouse buttons
+int mouseX = 0, mouseY = 0;                 // Last known X and Y of the mouse
+bool sphereOn = false;                      // Show the camera radius sphere
+
+bool wireframe = false;                     // Display as a wireframe?
+bool showAxes = true;                       // Display axes?
 
 // Camera
 enum cameraList { CAMERA_INNER = 0, CAMERA_OUTER = 1 };
@@ -220,20 +222,25 @@ void initScene()
 ////////////////////////////////////////////////////////////////////////////////
 void drawSceneElements(void)
 {
-    // Draw axes
     glDisable(GL_LIGHTING);
-    glBegin(GL_LINES);
-    // x
-    glColor3f(1, 0, 0);
-    glVertex3f(0, 0, 0); glVertex3f(3, 0, 0);
-    // y
-    glColor3f(0, 1, 0);
-    glVertex3f(0, 0, 0); glVertex3f(0, 3, 0);
-    // z
-    glColor3f(0, 0, 1);
-    glVertex3f(0, 0, 0); glVertex3f(0, 0, 3);
-    glEnd();
 
+    // Draw axes
+    if (showAxes)
+    {
+        glBegin(GL_LINES);
+        // x
+        glColor3f(1, 0, 0);
+        glVertex3f(0, 0, 0); glVertex3f(3, 0, 0);
+        // y
+        glColor3f(0, 1, 0);
+        glVertex3f(0, 0, 0); glVertex3f(0, 3, 0);
+        // z
+        glColor3f(0, 0, 1);
+        glVertex3f(0, 0, 0); glVertex3f(0, 0, 3);
+        glEnd();
+    }
+
+    // Wireframes should be white and don't need lighting or textures
     glColor3f(1, 1, 1);
     if (!wireframe)
     {
@@ -549,7 +556,12 @@ void processKeyInput(unsigned char key, int x, int y)
     case '1': // Toggle wireframe
         wireframe = !wireframe;
         break;
+    case '2': // Toggle axes
+        showAxes = !showAxes;
+        break;
     }
+
+    glutPostRedisplay();
 }
 
 // main() //////////////////////////////////////////////////////////////////////
