@@ -568,6 +568,12 @@ void processKeyInput(unsigned char key, int x, int y)
     case 'a': // Toggle robot animation
         doRobotAnim = !doRobotAnim;
         break;
+    case 'i': // Switch to inner camera
+        currentCamera = CAMERA_INNER;
+        break;
+    case 'o': // Switch to outer camera
+        currentCamera = CAMERA_OUTER;
+        break;
     }
 
     glutPostRedisplay();
