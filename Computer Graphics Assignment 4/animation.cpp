@@ -221,13 +221,18 @@ void Robot::draw() const
 	// Draw the head
 
 	CubeTexCoords coords =
-	{
-		0, 0, 0, 0, 0, {0.5, 0.5, 0.6, 0.6}
-	};
+	{{
+		{ 0 },
+		{ 0 },
+		{ 0 },
+		{ 0 },
+		{ 0 },
+		{ 0.5, 0.5, 0.6, 0.6 }
+	}};
 
 	glPushMatrix();
 	glTranslatef(0, 3.65, 0);
-	wireframe_ ? glutWireCube(0.8f) : solidCube(0.8f);
+	wireframe_ ? glutWireCube(0.8f) : solidCube(0.8f, &coords);
 	glPopMatrix();
 
 	// Draw the body
