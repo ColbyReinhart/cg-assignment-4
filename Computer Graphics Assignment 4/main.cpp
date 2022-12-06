@@ -234,8 +234,12 @@ void drawSceneElements(void)
     glVertex3f(0, 0, 0); glVertex3f(0, 0, 3);
     glEnd();
 
-    glEnable(GL_LIGHTING);
-    glEnable(GL_TEXTURE_2D);
+    glColor3f(1, 1, 1);
+    if (!wireframe)
+    {
+        glEnable(GL_LIGHTING);
+        glEnable(GL_TEXTURE_2D);
+    }
 
     // Draw the ground
     const int groundSize = 10;
