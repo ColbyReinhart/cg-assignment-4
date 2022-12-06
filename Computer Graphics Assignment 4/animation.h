@@ -68,7 +68,8 @@ public:
 	// Constructors
 	DynamicModel() {}
 	DynamicModel(const struct Vec3& pos, const struct Vec3& rot = { 0 }, const struct Vec3& scale = { 1, 1, 1 });
-	
+	virtual DynamicModel* clone() = 0;
+
 	// Transformation functions
 	void translate(const Vec3& pos, const bool delta = true);
 	void rotate(const Vec3& rot,const bool delta = true);
@@ -104,6 +105,8 @@ public:
 		const struct Vec3& rot = { 0 },
 		const struct Vec3& scale = { 1, 1, 1 }
 	) : Robot() { pos_ = pos; rot_ = rot; scale_ = scale; }
+
+	virtual Robot* clone() override { return new Robot(*this); }
 
 	virtual void draw() const override;
 };
@@ -204,6 +207,7 @@ private:
 	std::list<KeyFrame*>::iterator currentKeyframe_;
 	DynamicModel& model_;
 	bool initialized_ = false;
+	DynamicModel* saveState_ = nullptr;
 };
 
 #endif // ANIMATION_H

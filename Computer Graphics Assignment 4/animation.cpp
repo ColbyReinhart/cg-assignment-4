@@ -412,6 +412,7 @@ Animation& Animation::addKeyframe(KeyFrame* keyframe)
 
 void Animation::initialize()
 {
+	// Don't initialize of there's no assigned keyframes
 	if (keyframes_.empty())
 	{
 		std::cerr << "ERROR: attempt to call Animation::initialize() without"
@@ -419,9 +420,17 @@ void Animation::initialize()
 		exit(11);
 	}
 
+	// Start up the first keyframe
 	currentKeyframe_ = keyframes_.begin();
 	(*currentKeyframe_)->initialize();
 	initialized_ = true;
+
+	// Save the dynamic model's current state
+	if (saveState_ != nullptr)
+	{
+		delete saveState_;
+	}
+	saveState_ = model_.clone();
 }
 
 void Animation::animate()
@@ -440,7 +449,7 @@ void Animation::animate()
 
 		if (currentKeyframe_ == keyframes_.end())
 		{
-			currentKeyframe_ = keyframes_.begin();
+			reset();
 		}
 
 		(*currentKeyframe_)->initialize();
@@ -451,6 +460,23 @@ void Animation::animate()
 
 void Animation::reset()
 {
-	(*currentKeyframe_)->reset();
+	// Reset the current keyframe we're on
+	if (currentKeyframe_ != keyframes_.end())
+	{
+		(*currentKeyframe_)->reset();
+	}
+
+	// Go back to the first keyframe
 	currentKeyframe_ = keyframes_.begin();
+
+	// Revert to the saved state (if possible)
+	if (saveState_ != nullptr)
+	{
+		model_ = *saveState_;
+	}
+	else
+	{
+		std::cerr << "WARNING: Animation::reset() was called, but "
+			<< "there was no previous save state to revert to!" << std::endl;
+	}
 }
