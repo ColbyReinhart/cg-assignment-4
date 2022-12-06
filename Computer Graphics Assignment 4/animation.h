@@ -39,6 +39,7 @@ public:
 	void setPos(Vec3 pos) { pos_ = pos; }
 	void setRot(Vec3 rot) { rot_ = rot; }
 	void setScale(Vec3 scale) { scale_ = scale; }
+	void useWireframe(const bool wireframe = true) { wireframe_ = wireframe; }
 
 protected:
 	virtual void setTransform() const final;
@@ -46,6 +47,7 @@ protected:
 	Vec3 pos_ = { 0 };
 	Vec3 rot_ = { 0 };
 	Vec3 scale_ = { 1, 1, 1 };
+	bool wireframe_ = false;
 };
 
 //

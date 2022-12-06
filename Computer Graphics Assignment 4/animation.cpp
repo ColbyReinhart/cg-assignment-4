@@ -99,7 +99,7 @@ void Tree::draw(GLuint* textureIDs) const
 	glPushMatrix();
 	glTranslatef(0, 1.2f, 0);
 	glScalef(2, 4.5f, 2);
-	solidCube(1);
+	wireframe_? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 
 	// Draw the leaves
@@ -110,31 +110,31 @@ void Tree::draw(GLuint* textureIDs) const
 	glPushMatrix();
 	glTranslatef(0, 4.5f, 0);
 	glScalef(10.0f, 2.0f, 10.0f);
-	solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(0, 6.5f, 0);
 	glScalef(6.0f, 2.0f, 6.0f);
-	solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(0, 8.5f, 0);
 	glScalef(2.0f, 2.0f, 6.0f);
-	solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(2.0f, 8.5f, 0);
 	glScalef(2.0f, 2.0f, 2.0f);
-	solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(-2.0f, 8.5f, 0);
 	glScalef(2.0f, 2.0f, 2.0f);
-	solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1);
 	glPopMatrix();
 
 	// Pop the used matrix

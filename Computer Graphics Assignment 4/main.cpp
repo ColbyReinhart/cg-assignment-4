@@ -274,11 +274,13 @@ void drawSceneElements(void)
 
     // Draw the robot
     glBindTexture(GL_TEXTURE_2D, textureIDs[3]); // metal.jpg
+    robot.useWireframe(wireframe);
     robot.draw();
 
     // Draw trees
     for (StaticModel* tree : trees)
     {
+        tree->useWireframe(wireframe);
         tree->draw(textureIDs);
     }
 
