@@ -221,6 +221,7 @@ void initScene()
 void drawSceneElements(void)
 {
     // Draw axes
+    glDisable(GL_LIGHTING);
     glBegin(GL_LINES);
     // x
     glColor3f(1, 0, 0);
