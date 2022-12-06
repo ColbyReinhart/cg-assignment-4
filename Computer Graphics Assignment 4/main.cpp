@@ -53,12 +53,13 @@ const std::string rightKnee = "right knee";
 vector<StaticModel*> trees;
 
 // Textures
-const int numTextures = 3;
+const int numTextures = 4;
 char* textureNames[numTextures] =
 {
     (char*)"textures/oak-log.png",
     (char*)"textures/oak-leaves.png",
-    (char*)"textures/grass.png"
+    (char*)"textures/grass.png",
+    (char*)"textures/metal.jpg"
 };
 GLuint textureIDs[numTextures];
 
@@ -252,6 +253,7 @@ void drawSceneElements(void)
 
 
     // Draw the robot
+    glBindTexture(GL_TEXTURE_2D, textureIDs[3]);
     robot.draw();
 
     // Draw trees
