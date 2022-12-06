@@ -443,18 +443,23 @@ void Animation::animate()
 		exit(10);
 	}
 
+	// If the current keyframe is finished
 	if ((*currentKeyframe_)->finished())
 	{
+		// Go to the next one
 		++currentKeyframe_;
 
+		// If that was the last one, reset
 		if (currentKeyframe_ == keyframes_.end())
 		{
 			reset();
 		}
 
+		// Initialize the next keyframe
 		(*currentKeyframe_)->initialize();
 	}
 
+	// Apply the current keyframe
 	(*currentKeyframe_)->apply(model_);
 }
 
