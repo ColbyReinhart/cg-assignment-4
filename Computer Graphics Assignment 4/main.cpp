@@ -586,6 +586,17 @@ void processKeyInput(unsigned char key, int x, int y)
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char** argv)
 {
+    // Print controls
+    std::cout << "CONTROLS:" << std::endl
+        << "Hold left click and drag to move the outer camera" << std::endl
+        << "ESC:\t\tExit the program" << std::endl
+        << "1:\t\tToggle wireframes" << std::endl
+        << "2:\t\tToggle the axes in the center of the screen" << std::endl
+        << "a:\t\tToggle the robot's animation on and off" << std::endl
+        << "i:\t\tSwitch control to the inner camera" << std::endl
+        << "o:\t\tSwitch control to the outer camera" << std::endl
+        << "Arrow Keys:\tMove the inner camera" << std::endl;
+
     //create a double-buffered GLUT window at (50,50) with predefined windowsize
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
