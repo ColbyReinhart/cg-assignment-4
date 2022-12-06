@@ -638,7 +638,7 @@ int main(int argc, char** argv)
     recomputeOrientation(outerCamXYZ, outerCamTPR);
 
     // Set up robot's starting position
-    robot.translate({ 0, -1, 0 }, false);
+    robot.translate({ 0, -1, -6 }, false);
     robot.rotateJoint(leftElbow, -20.0f);
     robot.rotateJoint(leftShoulder, 30.0f);
     robot.rotateJoint(rightElbow, -20.0f);
@@ -658,6 +658,7 @@ int main(int argc, char** argv)
     walk1.addComponent(new JointRotation(leftKnee, -5.0f));
     walk1.addComponent(new JointRotation(rightHip, -25.0f));
     walk1.addComponent(new JointRotation(rightKnee, 40.0f));
+    walk1.addComponent(new Translation({ 0, 0, 0.75f }));
     robotWalking.addKeyframe(&walk1);
 
     KeyFrame walk2(30);
@@ -666,6 +667,7 @@ int main(int argc, char** argv)
     walk2.addComponent(new JointRotation(leftHip, 25.0f));
     walk2.addComponent(new JointRotation(rightHip, -25.0f));
     walk2.addComponent(new JointRotation(rightKnee, -35.0f));
+    walk2.addComponent(new Translation({ 0, 0, 0.75f }));
     robotWalking.addKeyframe(&walk2);
 
     KeyFrame walk3(30);
@@ -675,6 +677,7 @@ int main(int argc, char** argv)
     walk3.addComponent(new JointRotation(leftKnee, 40.0f));
     walk3.addComponent(new JointRotation(rightHip, 25.0f));
     walk3.addComponent(new JointRotation(rightKnee, -5.0f));
+    walk3.addComponent(new Translation({ 0, 0, 0.75f }));
     robotWalking.addKeyframe(&walk3);
 
     KeyFrame walk4(30);
@@ -683,6 +686,21 @@ int main(int argc, char** argv)
     walk4.addComponent(new JointRotation(leftHip, -25.0f));
     walk4.addComponent(new JointRotation(leftKnee, -35.0f));
     walk4.addComponent(new JointRotation(rightHip, 25.0f));
+    walk4.addComponent(new Translation({ 0, 0, 0.75f }));
+    robotWalking.addKeyframe(&walk4);
+
+    // repeat the walking cycle three times
+    robotWalking.addKeyframe(&walk1);
+    robotWalking.addKeyframe(&walk2);
+    robotWalking.addKeyframe(&walk3);
+    robotWalking.addKeyframe(&walk4);
+    robotWalking.addKeyframe(&walk1);
+    robotWalking.addKeyframe(&walk2);
+    robotWalking.addKeyframe(&walk3);
+    robotWalking.addKeyframe(&walk4);
+    robotWalking.addKeyframe(&walk1);
+    robotWalking.addKeyframe(&walk2);
+    robotWalking.addKeyframe(&walk3);
     robotWalking.addKeyframe(&walk4);
 
     robotWalking.initialize();
