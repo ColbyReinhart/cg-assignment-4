@@ -592,10 +592,10 @@ void processSpecialKeys(int key, int x, int y)
         innerCamXYZ -= (innerCamDir / cameraSpeedDivisor);
         break;
     case GLUT_KEY_LEFT: // Strafe inner camera left
-        innerCamXYZ -= (cross(innerCamDir, Point(0, 1, 0)));
+        innerCamXYZ -= (cross(innerCamDir, Point(0, 1, 0)) / cameraSpeedDivisor);
         break;
     case GLUT_KEY_RIGHT:
-        innerCamXYZ += (cross(innerCamDir, Point(0, 1, 0)));
+        innerCamXYZ += (cross(innerCamDir, Point(0, 1, 0)) / cameraSpeedDivisor);
         break;
     }
 
