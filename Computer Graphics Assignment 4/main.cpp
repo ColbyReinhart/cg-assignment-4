@@ -22,6 +22,7 @@ bool sphereOn = false;                      // Show the camera radius sphere
 
 bool wireframe = false;                     // Display as a wireframe?
 bool showAxes = true;                       // Display axes?
+bool doRobotAnim = true;                    // Animate the robot?
 
 // Camera
 enum cameraList { CAMERA_INNER = 0, CAMERA_OUTER = 1 };
@@ -481,7 +482,10 @@ void renderCallback(void)
 
 void doAnimation(int v)
 {
-    robotWalking.animate();
+    if (doRobotAnim)
+    {
+        robotWalking.animate();
+    }
     glutPostRedisplay();
     glutTimerFunc(Animation::FRAME_DELAY, doAnimation, v);
 }
@@ -553,11 +557,16 @@ void processKeyInput(unsigned char key, int x, int y)
 {
     switch (key)
     {
+    case 27: // Escape key
+        exit(0);
     case '1': // Toggle wireframe
         wireframe = !wireframe;
         break;
     case '2': // Toggle axes
         showAxes = !showAxes;
+        break;
+    case 'a': // Toggle robot animation
+        doRobotAnim = !doRobotAnim;
         break;
     }
 
