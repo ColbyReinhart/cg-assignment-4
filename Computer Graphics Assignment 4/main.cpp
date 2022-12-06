@@ -552,8 +552,6 @@ int main(int argc, char** argv)
     // Create straight line walking animation
     //
 
-    // Move the left foot halfway back, pick up the right foot and move the
-    // right leg forward
     KeyFrame walk1(30);
     walk1.addComponent(new JointRotation(leftShoulder, -30.0f));
     walk1.addComponent(new JointRotation(rightShoulder, 30.0f));
@@ -562,54 +560,33 @@ int main(int argc, char** argv)
     walk1.addComponent(new JointRotation(rightHip, -25.0f));
     walk1.addComponent(new JointRotation(rightKnee, 40.0f));
     robotWalking.addKeyframe(&walk1);
+
+    KeyFrame walk2(30);
+    walk2.addComponent(new JointRotation(leftShoulder, -30.0f));
+    walk2.addComponent(new JointRotation(rightShoulder, 30.0f));
+    walk2.addComponent(new JointRotation(leftHip, 25.0f));
+    walk2.addComponent(new JointRotation(rightHip, -25.0f));
+    walk2.addComponent(new JointRotation(rightKnee, -35.0f));
+    robotWalking.addKeyframe(&walk2);
+
+    KeyFrame walk3(30);
+    walk3.addComponent(new JointRotation(leftShoulder, 30.0f));
+    walk3.addComponent(new JointRotation(rightShoulder, -30.0f));
+    walk3.addComponent(new JointRotation(leftHip, -25.0f));
+    walk3.addComponent(new JointRotation(leftKnee, 40.0f));
+    walk3.addComponent(new JointRotation(rightHip, 25.0f));
+    walk3.addComponent(new JointRotation(rightKnee, -5.0f));
+    robotWalking.addKeyframe(&walk3);
+
+    KeyFrame walk4(30);
+    walk4.addComponent(new JointRotation(leftShoulder, 30.0f));
+    walk4.addComponent(new JointRotation(rightShoulder, -30.0f));
+    walk4.addComponent(new JointRotation(leftHip, -25.0f));
+    walk4.addComponent(new JointRotation(leftKnee, -35.0f));
+    walk4.addComponent(new JointRotation(rightHip, 25.0f));
+    robotWalking.addKeyframe(&walk4);
+
     robotWalking.initialize();
-
-
-    /*RobotAnimator::Animation straightWalk1
-    {
-        { 0, -30.0f, 0, 30.0f, 25.0f, -5.0f, -25.0f, 40.0f },	// joint rotations
-        { 0 },						                            // translation
-        { 0 },													// rotation
-        { 0 },													// translation before rotation
-        30														// frames to complete
-    };
-
-    // Move the left foot the rest of the way back, move the right leg the
-    // rest of the way forward, and straigten the right leg
-    RobotAnimator::Animation straightWalk2
-    {
-        { 0, -30.0f, 0, 30.0f, 25.0f, 0, -25.0f, -35.0f },	// joint rotations
-        { 0 },                          					// translation
-        { 0 },												// rotation
-        { 0 },												// translation before rotation
-        30													// frames to complete
-    };
-
-    // Move the right foot halfway back, pick up the left foot and move the
-    // left leg forward
-    RobotAnimator::Animation straightWalk3
-    {
-        { 0, 30.0f, 0, -30.0f, -25.0f, 40.0f, 25.0f, -5.0f },	// joint rotations
-        { 0 },	                            					// translation
-        { 0 },													// rotation
-        { 0 },													// translation before rotation
-        30														// frames to complete
-    };
-
-    // Finish extending left leg
-    RobotAnimator::Animation straightWalk4
-    {
-        { 0, 30.0f, 0, -30.0f, -25.0f, -35.0f, 25.0f, 0 },	// joint rotations
-        { 0 },                          					// translation
-        { 0 },												// rotation
-        { 0 },												// translation before rotation
-        30													// frames to complete
-    };
-
-    // Initialize animator
-    straightAnimator.addAnim(straightWalk1).addAnim(straightWalk2).addAnim(straightWalk3).addAnim(straightWalk4);
-    straightAnimator.addAnim(straightWalk1).addAnim(straightWalk2).addAnim(straightWalk3).addAnim(straightWalk4);
-    straightAnimator.saveState();*/
 
     // Create some trees
     trees.emplace_back(new Tree({ -8, 0, -8 }));
