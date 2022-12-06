@@ -219,6 +219,12 @@ void Robot::draw() const
 	glColor3f(1, 1, 1); // Color suitable for texturing
 
 	// Draw the head
+
+	CubeTexCoords coords =
+	{
+		0, 0, 0, 0, 0, {0.5, 0.5, 0.6, 0.6}
+	};
+
 	glPushMatrix();
 	glTranslatef(0, 3.65, 0);
 	wireframe_ ? glutWireCube(0.8f) : solidCube(0.8f);

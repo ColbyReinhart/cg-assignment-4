@@ -9,8 +9,18 @@
 #include <GL/glut.h>
 #include <iostream>
 
-struct TexRect;
-struct CubeTexCoords;
+struct TexRect
+{
+	float bottomLeftX = 0.0f;
+	float bottomLeftY = 0.0f;
+	float topRightX = 1.0f;
+	float topRightY = 1.0f;
+};
+
+struct CubeTexCoords
+{
+	TexRect faces[6];
+};
 
 void solidCube(const GLfloat size, const CubeTexCoords* coords = nullptr);
 void solidSphere(const GLfloat size);

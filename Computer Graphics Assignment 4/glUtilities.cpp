@@ -20,28 +20,6 @@ const int space = 11;
 const int VertexCount = (90 / space) * (360 / space) * 4;
 VERTICES VERTEX[VertexCount];
 
-struct TexRect
-{
-	GLfloat bottomLeftX;
-	GLfloat bottomLeftY;
-	GLfloat topRightX;
-	GLfloat topRightY;
-};
-
-struct CubeTexCoords
-{
-	enum class Faces
-	{
-		TOP = 0,
-		BOTTOM = 1,
-		LEFT = 2,
-		RIGHT = 3,
-		FRONT = 4,
-		BACK = 5
-	};
-	TexRect faces[6];
-};
-
 void solidCube(const GLfloat size, const CubeTexCoords* coords)
 {
 	static GLfloat n[6][3] =
