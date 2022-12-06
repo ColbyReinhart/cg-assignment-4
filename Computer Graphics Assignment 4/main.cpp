@@ -53,11 +53,12 @@ const std::string rightKnee = "right knee";
 vector<StaticModel*> trees;
 
 // Textures
-const int numTextures = 2;
+const int numTextures = 3;
 char* textureNames[numTextures] =
 {
     (char*)"textures/oak-log.png",
-    (char*)"textures/oak-leaves.png"
+    (char*)"textures/oak-leaves.png",
+    (char*)"textures/grass.png"
 };
 GLuint textureIDs[numTextures];
 
@@ -218,22 +219,6 @@ void initScene()
 ////////////////////////////////////////////////////////////////////////////////
 void drawSceneElements(void)
 {
-    //draw a simple grid
-    const int gridBounds = 10;
-
-    glDisable(GL_LIGHTING);
-    glColor3f(1, 1, 1);
-    for (int dir = 0; dir < 2; dir++)
-    {
-        for (int i = gridBounds * -1; i <= gridBounds; i++)
-        {
-            glBegin(GL_LINE_STRIP);
-            for (int j = gridBounds * -1; j <= gridBounds; j++)
-                glVertex3f(dir < 1 ? i : j, -1.0f, dir < 1 ? j : i);
-            glEnd();
-        }
-    }
-
     // Draw axes
     glBegin(GL_LINES);
     // x
@@ -247,12 +232,27 @@ void drawSceneElements(void)
     glVertex3f(0, 0, 0); glVertex3f(0, 0, 3);
     glEnd();
 
+    glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
+
+    // Draw the ground
+    const int groundSize = 10;
+    const int groundHeight = -1;
+    glBindTexture(GL_TEXTURE_2D, textureIDs[2]); // ground.png
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(groundSize, groundHeight, groundSize);
+    glTexCoord2f(0.0, groundSize);
+    glVertex3f(groundSize, groundHeight, -groundSize);
+    glTexCoord2f(groundSize, groundSize);
+    glVertex3f(-groundSize, groundHeight, -groundSize);
+    glTexCoord2f(groundSize, 0.0);
+    glVertex3f(-groundSize, groundHeight, groundSize);
+    glEnd();
+
 
     // Draw the robot
-    glEnable(GL_LIGHTING);
     robot.draw();
-
-    glEnable(GL_TEXTURE_2D);
 
     // Draw trees
     for (StaticModel* tree : trees)
