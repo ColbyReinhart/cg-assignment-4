@@ -579,6 +579,29 @@ void processKeyInput(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
+void processSpecialKeys(int key, int x, int y)
+{
+    const float cameraSpeedDivisor = 5;
+
+    switch (key)
+    {
+    case GLUT_KEY_UP: // Move inner camera forward
+        innerCamXYZ += (innerCamDir / cameraSpeedDivisor);
+        break;
+    case GLUT_KEY_DOWN: // Move inner camera backward
+        innerCamXYZ -= (innerCamDir / cameraSpeedDivisor);
+        break;
+    case GLUT_KEY_LEFT: // Strafe inner camera left
+        innerCamXYZ -= (cross(innerCamDir, Point(0, 1, 0)));
+        break;
+    case GLUT_KEY_RIGHT:
+        innerCamXYZ += (cross(innerCamDir, Point(0, 1, 0)));
+        break;
+    }
+
+    glutPostRedisplay();
+}
+
 // main() //////////////////////////////////////////////////////////////////////
 //
 //  Program entry point. Does not process command line arguments.
@@ -675,6 +698,7 @@ int main(int argc, char** argv)
     glutReshapeFunc(resizeWindow);
     glutMouseFunc(mouseCallback);
     glutKeyboardFunc(processKeyInput);
+    glutSpecialFunc(processSpecialKeys);
     glutMotionFunc(mouseMotion);
     glutTimerFunc(0, doAnimation, 0);
 
