@@ -76,7 +76,7 @@ public:
 	void scale(const Vec3& scale, const bool delta = true);
 
 	// Joint rotations
-	void rotateJoint(std::string joint, const int rot) { joints_[joint] += rot; }
+	void rotateJoint(std::string joint, const float rot) {joints_[joint] += rot; }
 	int getJointRot(std::string joint) const { return joints_.at(joint); }
 
 	// Display
@@ -84,7 +84,7 @@ public:
 	void useWireframe(const bool use = true) { wireframe_ = use; }
 
 protected:
-	std::unordered_map<std::string, int> joints_;
+	std::unordered_map<std::string, float> joints_;
 	Vec3 pos_ = { 0 };
 	Vec3 rot_ = { 0 };
 	Vec3 scale_ = { 1, 1, 1 };

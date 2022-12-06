@@ -40,10 +40,10 @@ Point innerCamDir;
 Robot robot;
 Animation robotWalking(robot);
 
-const std::string leftElbow = "left elbow";
 const std::string leftShoulder = "left shoulder";
-const std::string rightElbow = "right elbow";
+const std::string leftElbow = "left elbow";
 const std::string rightShoulder = "right shoulder";
+const std::string rightElbow = "right elbow";
 const std::string leftHip = "left hip";
 const std::string leftKnee = "left knee";
 const std::string rightHip = "right hip";
