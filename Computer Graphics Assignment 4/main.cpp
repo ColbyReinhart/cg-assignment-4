@@ -626,7 +626,7 @@ int main(int argc, char** argv)
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(50, 50);
     glutInitWindowSize(windowWidth, windowHeight);
-    glutCreateWindow("double cameras... woahhhhh double cameras");
+    glutCreateWindow("Colby Reinhart 811053904");
 
     //give the camera a 'pretty' starting point!
     innerCamXYZ = Point(5, 5, 5);
