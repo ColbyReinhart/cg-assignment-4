@@ -264,7 +264,7 @@ void Robot::draw() const
 		{ 0.75f, 0.0f, 0.81f, 0.185f },	// right
 		{ 0.69f, 0.24f, 0.75f, 0.25f },	// top
 		{ 0.75f, 0.0f, 0.81f, 0.185f },	// left
-		{ 0.69f, 0.37f, 0.75f, 0.5f },	// bottom
+		{ 0.75f, 0.37f, 0.81f, 0.5f },	// bottom
 		{ 0.69f, 0.0f, 0.75f, 0.185f },	// front
 		{ 0.81f, 0.0f, 0.87f, 0.185f }	// back
 	}};
@@ -316,6 +316,25 @@ void Robot::draw() const
 	// Pop matrix
 	glPopMatrix();
 
+	CubeTexCoords coordsUpperLeg =
+	{ {
+		{ 0.0f, 0.185f, 0.06f, 0.37f },	// right
+		{ 0.06f, 0.24f, 0.12f, 0.25f },	// top
+		{ 0.0f, 0.185f, 0.06f, 0.37f },	// left
+		{ 0.06f, 0.37f, 0.12f, 0.5f },	// bottom
+		{ 0.06f, 0.185f, 0.12f, 0.37f },// front
+		{ 0.18f, 0.185f, 0.25f, 0.37f }	// back
+	} };
+	CubeTexCoords coordsLowerLeg =
+	{ {
+		{ 0.0f, 0.0f, 0.06f, 0.185f },	// right
+		{ 0.06f, 0.24f, 0.12f, 0.25f },	// top
+		{ 0.0f, 0.0f, 0.06f, 0.185f },	// left
+		{ 0.13f, 0.37f, 0.18f, 0.5f },	// bottom
+		{ 0.06f, 0.0f, 0.12f, 0.185f },	// front
+		{ 0.18f, 0.0f, 0.25f, 0.185f }	// back
+	} };
+
 	// Draw the left leg
 	glPushMatrix();
 	// Thigh
@@ -325,7 +344,7 @@ void Robot::draw() const
 	// Scale and draw
 	glPushMatrix();
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1, &coordsUpperLeg);
 	glPopMatrix();
 	// Knee
 	glTranslatef(0, -0.5, 0); // Move center to point of rotation
@@ -334,7 +353,7 @@ void Robot::draw() const
 	glPushMatrix();
 	// Scale and draw
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1, &coordsLowerLeg);
 	glPopMatrix();
 	// Pop matrix
 	glPopMatrix();
@@ -348,7 +367,7 @@ void Robot::draw() const
 	// Scale and draw
 	glPushMatrix();
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1, &coordsUpperLeg);
 	glPopMatrix();
 	// Knee
 	glTranslatef(0, -0.5, 0); // Move center to point of rotation
@@ -357,7 +376,7 @@ void Robot::draw() const
 	glPushMatrix();
 	// Scale and draw
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1, &coordsLowerLeg);
 	glPopMatrix();
 	// Pop matrix
 	glPopMatrix();
