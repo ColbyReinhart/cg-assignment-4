@@ -255,14 +255,14 @@ void Robot::draw() const
 		{ 0.75f, 0.185f, 0.81f, 0.37f },// right
 		{ 0.69f, 0.37f, 0.75f, 0.5f },	// top
 		{ 0.75f, 0.185f, 0.81f, 0.37f },// left
-		{ 0.69f, 0.37f, 0.75f, 0.5f },	// bottom
+		{ 0.69f, 0.24f, 0.75f, 0.25f },	// bottom
 		{ 0.69f, 0.185f, 0.75f, 0.37f },// front
 		{ 0.81f, 0.185f, 0.87f, 0.37f }	// back
 	}};
 	CubeTexCoords coordsLowerArm =
 	{{
 		{ 0.75f, 0.0f, 0.81f, 0.185f },	// right
-		{ 0.69f, 0.37f, 0.75f, 0.5f },	// top
+		{ 0.69f, 0.24f, 0.75f, 0.25f },	// top
 		{ 0.75f, 0.0f, 0.81f, 0.185f },	// left
 		{ 0.69f, 0.37f, 0.75f, 0.5f },	// bottom
 		{ 0.69f, 0.0f, 0.75f, 0.185f },	// front
