@@ -286,7 +286,7 @@ void drawSceneElements(void)
 
 
     // Draw the robot
-    glBindTexture(GL_TEXTURE_2D, textureIDs[3]); // metal.jpg
+    glBindTexture(GL_TEXTURE_2D, textureIDs[4]); // steve.jpg
     robot.useWireframe(wireframe);
     robot.draw();
 

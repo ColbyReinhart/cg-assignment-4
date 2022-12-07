@@ -222,12 +222,12 @@ void Robot::draw() const
 
 	CubeTexCoords coords =
 	{{
-		{ 0 },
-		{ 0 },
-		{ 0 },
-		{ 0 },
-		{ 0 },
-		{ 0.5, 0.5, 0.6, 0.6 }
+		{ 0.25f, 0.5f, 0.375f, 0.75f },	// right
+		{ 0.125f, 0.75f, 0.25f, 1.0f },	// top
+		{ 0.0f, 0.5f, 0.125f, 0.75f },	// left
+		{ 0.25f, 0.75f, 0.375f, 1.0f },	// bottom
+		{ 0.125f, 0.5f, 0.25f, 0.75f },	// front
+		{ 0.375f, 0.5f, 0.5f, 0.75f }	// back
 	}};
 
 	glPushMatrix();

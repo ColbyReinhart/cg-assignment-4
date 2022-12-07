@@ -22,7 +22,50 @@ VERTICES VERTEX[VertexCount];
 
 void solidCube(const GLfloat size, const CubeTexCoords* coords)
 {
-	static GLfloat n[6][3] =
+	static GLint faces[6][4] =
+	{
+	  {1, 2, 3, 0},		// right
+	  {6, 7, 3, 2},		// top
+	  {4, 7, 6, 5},		// left
+	  {4, 5, 1, 0},		// bottom
+	  {5, 6, 2, 1},		// front
+	  {0, 3, 7, 4}		// back
+	};
+	GLfloat v[8][3];
+	GLint i;
+
+	v[0][0] = v[1][0] = v[2][0] = v[3][0] = -size / 2;
+	v[4][0] = v[5][0] = v[6][0] = v[7][0] = size / 2;
+
+	v[0][1] = v[1][1] = v[4][1] = v[5][1] = -size / 2;
+	v[2][1] = v[3][1] = v[6][1] = v[7][1] = size / 2;
+
+	v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size / 2;
+	v[1][2] = v[2][2] = v[5][2] = v[6][2] = size / 2;
+
+	for (i = 5; i >= 0; i--)
+	{
+		// If we've been supplied texture coordinates, use them
+		TexRect tex{ 0, 0, 1, 1 };
+		if (coords != nullptr)
+		{
+			tex = coords->faces[i];
+		}
+
+		glBegin(GL_QUADS);
+		///glNormal3fv(&n[i][0]);
+		glTexCoord2f(tex.bottomLeftX, tex.bottomLeftY);
+		glVertex3fv(&v[faces[i][0]][0]);
+		glTexCoord2f(tex.bottomLeftX, tex.topRightY);
+		glVertex3fv(&v[faces[i][1]][0]);
+		glTexCoord2f(tex.topRightX, tex.topRightY);
+		glVertex3fv(&v[faces[i][2]][0]);
+		glTexCoord2f(tex.topRightX, tex.bottomLeftY);
+		glVertex3fv(&v[faces[i][3]][0]);
+		glEnd();
+	}
+
+	/*static GLfloat n[6][3] =
 	{
 	  {-1.0, 0.0, 0.0},	// left
 	  {0.0, 1.0, 0.0},	// top
@@ -60,7 +103,7 @@ void solidCube(const GLfloat size, const CubeTexCoords* coords)
 		}
 
 		glBegin(GL_QUADS);
-		glNormal3fv(&n[i][0]);
+		///glNormal3fv(&n[i][0]);
 		glTexCoord2f(tex.bottomLeftX, tex.bottomLeftY);
 		glVertex3fv(&v[faces[i][0]][0]);
 		glTexCoord2f(tex.bottomLeftX, tex.topRightY);
@@ -70,7 +113,7 @@ void solidCube(const GLfloat size, const CubeTexCoords* coords)
 		glTexCoord2f(tex.topRightX, tex.bottomLeftY);
 		glVertex3fv(&v[faces[i][3]][0]);
 		glEnd();
-	}
+	}*/
 }
 
 void solidSphere(const GLfloat size)
