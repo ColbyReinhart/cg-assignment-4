@@ -229,7 +229,6 @@ void Robot::draw() const
 		{ 0.125f, 0.5f, 0.25f, 0.75f },	// front
 		{ 0.375f, 0.5f, 0.5f, 0.75f }	// back
 	}};
-
 	glPushMatrix();
 	glTranslatef(0, 3.65, 0);
 	wireframe_ ? glutWireCube(0.8f) : solidCube(0.8f, &coordsHead);
@@ -238,19 +237,28 @@ void Robot::draw() const
 	// Draw the body
 	CubeTexCoords coordsBody =
 	{{
-		{ 0.25f, 0.0f, 0.31f, 0.4f },	// right
+		{ 0.25f, 0.0f, 0.31f, 0.37f },	// right
 		{ 0.31f, 0.4f, 0.44f, 0.5f },	// top
-		{ 0.44f, 0.0f, 0.5f, 0.4f },	// left
+		{ 0.44f, 0.0f, 0.5f, 0.37f },	// left
 		{ 0.44f, 0.4f, 0.57f, 0.5f },	// bottom
-		{ 0.31f, 0.0f, 0.44f, 0.4f },	// front
-		{ 0.5f, 0.0f, 0.63f, 0.4f }		// back
+		{ 0.31f, 0.0f, 0.44f, 0.37f },	// front
+		{ 0.5f, 0.0f, 0.63f, 0.37f }	// back
 	}};
-
 	glPushMatrix();
 	glTranslatef(0, 2.5, 0);
 	glScalef(1, 1.5, 0.6f);
 	wireframe_ ? glutWireCube(1) : solidCube(1, &coordsBody);
 	glPopMatrix();
+
+	CubeTexCoords coordsUpperArm =
+	{ {
+		{ 0.75f, 0.2f, 0.81f, 0.37f },	// right
+		{ 0.69f, 0.4f, 0.75f, 0.5f },	// top
+		{ 0.75f, 0.2f, 0.81f, 0.37f },	// left
+		{ 0.69f, 0.4f, 0.75f, 0.5f },	// bottom
+		{ 0.69f, 0.2f, 0.75f, 0.37f },	// front
+		{ 0.81f, 0.2f, 0.87f, 0.37f }	// back
+	} };
 
 	// Draw the left arm
 	glPushMatrix();
@@ -261,8 +269,9 @@ void Robot::draw() const
 	// Scale and draw
 	glPushMatrix();
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1, &coordsUpperArm);
 	glPopMatrix();
+
 	// Lower arm
 	glTranslatef(0, -0.5, 0); // Move center to point of rotation
 	glRotatef(getJointRot("left elbow"), 1, 0, 0); // Rotate joint
@@ -284,7 +293,7 @@ void Robot::draw() const
 	// Scale and draw
 	glPushMatrix();
 	glScalef(0.4, 0.85, 0.4);
-	wireframe_ ? glutWireCube(1) : solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1, &coordsUpperArm);
 	glPopMatrix();
 	// Lower arm
 	glTranslatef(0, -0.5, 0); // Move center to point of rotation
