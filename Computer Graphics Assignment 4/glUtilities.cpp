@@ -24,12 +24,12 @@ void solidCube(const GLfloat size, const CubeTexCoords* coords)
 {
 	static GLint faces[6][4] =
 	{
-	  {1, 2, 3, 0},		// right
+	  {0, 3, 2, 1},		// right
 	  {6, 7, 3, 2},		// top
-	  {4, 7, 6, 5},		// left
+	  {5, 6, 7, 4},		// left
 	  {4, 5, 1, 0},		// bottom
-	  {5, 6, 2, 1},		// front
-	  {0, 3, 7, 4}		// back
+	  {1, 2, 6, 5},		// front
+	  {4, 7, 3, 0}		// back
 	};
 	GLfloat v[8][3];
 	GLint i;

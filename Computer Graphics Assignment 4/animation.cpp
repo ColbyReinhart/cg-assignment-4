@@ -220,11 +220,11 @@ void Robot::draw() const
 
 	// Draw the head
 
-	CubeTexCoords coords =
+	CubeTexCoords coordsHead =
 	{{
-		{ 0.25f, 0.5f, 0.375f, 0.75f },	// right
+		{ 0.0f, 0.5f, 0.125f, 0.75f },	// right
 		{ 0.125f, 0.75f, 0.25f, 1.0f },	// top
-		{ 0.0f, 0.5f, 0.125f, 0.75f },	// left
+		{ 0.25f, 0.5f, 0.375f, 0.75f },	// left
 		{ 0.25f, 0.75f, 0.375f, 1.0f },	// bottom
 		{ 0.125f, 0.5f, 0.25f, 0.75f },	// front
 		{ 0.375f, 0.5f, 0.5f, 0.75f }	// back
@@ -232,14 +232,24 @@ void Robot::draw() const
 
 	glPushMatrix();
 	glTranslatef(0, 3.65, 0);
-	wireframe_ ? glutWireCube(0.8f) : solidCube(0.8f, &coords);
+	wireframe_ ? glutWireCube(0.8f) : solidCube(0.8f, &coordsHead);
 	glPopMatrix();
 
 	// Draw the body
+	CubeTexCoords coordsBody =
+	{{
+		{ 0.25f, 0.0f, 0.31f, 0.4f },	// right
+		{ 0.31f, 0.4f, 0.44f, 0.5f },	// top
+		{ 0.44f, 0.0f, 0.5f, 0.4f },	// left
+		{ 0.44f, 0.4f, 0.57f, 0.5f },	// bottom
+		{ 0.31f, 0.0f, 0.44f, 0.4f },	// front
+		{ 0.5f, 0.0f, 0.63f, 0.4f }		// back
+	}};
+
 	glPushMatrix();
 	glTranslatef(0, 2.5, 0);
 	glScalef(1, 1.5, 0.6f);
-	wireframe_ ? glutWireCube(1) : solidCube(1);
+	wireframe_ ? glutWireCube(1) : solidCube(1, &coordsBody);
 	glPopMatrix();
 
 	// Draw the left arm
